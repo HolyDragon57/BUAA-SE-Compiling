@@ -3,5 +3,5 @@
 image = {source = "dockerfile", path = "."}
 
 run = [
-	cat $input | ./main,
+	"cat $input | ./main",
 ]

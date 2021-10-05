@@ -5,7 +5,7 @@
 
 char getnbc(){
 	char c;
-	while((c = getchar()) == ' ' || c == '\n' || c == '\t'){
+	while(isspace(c = getchar())){
 	}
 	return c;
 }
@@ -66,7 +66,7 @@ int main(){
 				token[i++] = c;
 			}
 			//one more character
-			if(c == ' ' || c == '\n' || c == '\t'){
+			if(isspace(c)){
 				c = getnbc();
 			}
 			if(!isKey(token)){
@@ -80,7 +80,7 @@ int main(){
 				token[i++] = c;
 			}
 			//again
-			if(c == ' ' || c == '\n' || c == '\t'){
+			if(isspace(c)){
 				c = getnbc();
 			}
 			printf("Number(%s)\n", token);
@@ -94,7 +94,7 @@ int main(){
 			}
 			else{
 				printf("Assign\n");
-				if(temp == ' ' || temp == '\n' || c == '\t'){
+				if(isspace(temp)){
 					c = getnbc();
 				}
 				else c = temp;

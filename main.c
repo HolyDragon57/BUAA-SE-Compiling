@@ -5,7 +5,7 @@
 
 char getnbc(){
 	char c;
-	while((c = getchar()) == ' ' || c == '\n'){
+	while((c = getchar()) == ' ' || c == '\n' || c == '\t'){
 	}
 	return c;
 }
@@ -66,7 +66,7 @@ int main(){
 				token[i++] = c;
 			}
 			//one more character
-			if(c == ' ' || c == '\n'){
+			if(c == ' ' || c == '\n' || c == '\t'){
 				c = getnbc();
 			}
 			if(!isKey(token)){
@@ -80,7 +80,7 @@ int main(){
 				token[i++] = c;
 			}
 			//again
-			if(c == ' ' || c == '\n'){
+			if(c == ' ' || c == '\n' || c == '\t'){
 				c = getnbc();
 			}
 			printf("Number(%s)\n", token);
@@ -94,7 +94,7 @@ int main(){
 			}
 			else{
 				printf("Assign\n");
-				if(temp == ' ' || temp == '\n'){
+				if(temp == ' ' || temp == '\n' || c == '\t'){
 					c = getnbc();
 				}
 				else c = temp;

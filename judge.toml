@@ -1,7 +1,7 @@
-[jobs.test-submit]
+[jobs.lab1]
 
 image = {source = "dockerfile", path = "."}
 
 run = [
-	"cat $input | ./main",
+	"java Main $input $ir",
 ]

@@ -1,4 +1,5 @@
-FROM openjdk:12
-WORKDIR /project/src/
-COPY *.java ./
-RUN javac *.java
+FROM openjdk:12-alpine
+COPY ./* /app/
+WORKDIR /app/
+RUN javac -d ./output ./project/src/*.java
+WORKDIR /app/output

@@ -140,7 +140,8 @@ public class Lexer {
             while(c != '\n'){
                 int a = pushbackReader.read();
                 if(a == -1){
-                    System.exit(0);
+                    c = (char)a;
+                    break;
                 }
                 c = (char)a;
             }

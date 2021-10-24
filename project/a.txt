@@ -1,4 +1,3 @@
 int main() {
-	/* lalala */
-    return 023;
-//}
+    return -+(+-((-+(-+(1))));
+}

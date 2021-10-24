@@ -53,15 +53,65 @@ public class Parser {
             System.out.println("Parser: Return token error!");
             System.exit(-1);
         }
-        if(!(tokens.get(i).getType().equals("decimal-const") || tokens.get(i).getType().equals("octal-const") || tokens.get(i).getType().equals("hexadecimal-const"))){
-            System.out.println("Parser: Number error!");
-            System.exit(-1);
-        }
-        i ++;
+        i = Exp(tokens, i);
         if(!tokens.get(i++).getValue().equals(";")){
             System.out.println("Parser: ; error!");
             System.exit(-1);
         }
         return i;
+    }
+
+    protected static int Exp(ArrayList<Token> tokens, int i){
+        return AddExp(tokens, i);
+    }
+
+    protected static int AddExp(ArrayList<Token> tokens, int i){
+        return MulExp(tokens, i);
+    }
+
+    protected static int MulExp(ArrayList<Token> tokens, int i){
+        return UnaryExp(tokens, i);
+    }
+
+    protected static int UnaryExp(ArrayList<Token> tokens, int i){
+        if(tokens.get(i).getValue().equals("+") || tokens.get(i).getValue().equals("-")){
+            i = UnaryOp(tokens, i);
+            i = UnaryExp(tokens, i);
+        }
+        else i = PrimaryExp(tokens, i);
+        return i;
+    }
+
+    protected static int PrimaryExp(ArrayList<Token> tokens, int i){
+        if(tokens.get(i).getValue().equals("(")){
+            i = Exp(tokens, ++i);
+            if(tokens.get(i).getValue().equals(")")){
+                return ++i;
+            }
+            else {
+                System.out.println("Parser: PrimaryExp error!");
+                System.exit(-1);
+            }
+        }
+        else {
+            i = Number(tokens, i);
+        }
+        return i;
+    }
+
+    protected static int Number(ArrayList<Token> tokens, int i){
+        if(!(tokens.get(i).getType().equals("decimal-const") || tokens.get(i).getType().equals("octal-const") || tokens.get(i).getType().equals("hexadecimal-const"))){
+            System.out.println("Parser: Number error!");
+            System.exit(-1);
+        }
+        return ++i;
+    }
+
+    protected static int UnaryOp(ArrayList<Token> tokens, int i){
+        if(!(tokens.get(i).getValue().equals("+") || tokens.get(i).getValue().equals("-"))){
+            System.out.println("Parser: +/- error!");
+            System.exit(-1);
+        }
+        return ++i;
     }
 }

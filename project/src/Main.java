@@ -13,10 +13,13 @@ public class Main {
             tokens.add(token);
             token = Lexer.getToken(pushbackReader);
         }
-        Parser.CompUnit(tokens, 0);
-        IRgenerator.generate(tokens, fileWriter);
+        for(Token token1: tokens){
+            System.out.print(token1.getValue() + " ");
+        }
+        //Parser.CompUnit(tokens, 0);
+        //IRgenerator.generate(tokens, fileWriter);
 
         fileReader.close();
-        fileWriter.close();
+        //fileWriter.close();
     }
 }

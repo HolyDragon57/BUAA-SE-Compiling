@@ -61,20 +61,18 @@ public class IRgenerator {
                             }
                             i ++;
                         }
+                        Token token = new Token();
                         if(flag == -1){
-                            Token token = new Token();
                             token.setValue("-");
                             token.setType("single-symbol");
-                            operator.push(token);
                         }
                         else{
-                            Token token = new Token();
                             token.setValue("+");
                             token.setType("single-symbol");
-                            operator.push(token);
                         }
                         i --;
-                        continue;
+                        tokens.get(i).setValue(token.getValue());
+                        tokens.get(i).setType(token.getType());
                     }
                 }
                 //四则运算

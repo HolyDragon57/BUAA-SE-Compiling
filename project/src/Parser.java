@@ -61,6 +61,7 @@ public class Parser {
         return i;
     }
 
+    /*运用算符优先分析解决EXP左递归问题
     protected static int Exp(ArrayList<Token> tokens, int i){
         //标准四则运算，不考虑正负号
         Stack<Token> operand = new Stack<>();
@@ -135,7 +136,7 @@ public class Parser {
         }
         //System.out.println(operand.peek().getValue());
         return i;
-    }
+    }*/
 
     protected static int f(Token token){
         if(token.getValue().equals("+") || token.getValue().equals("-"))
@@ -180,17 +181,27 @@ public class Parser {
         return token;
     }
 
-    /*protected static int Exp(ArrayList<Token> tokens, int i){
+    protected static int Exp(ArrayList<Token> tokens, int i){
         return AddExp(tokens, i);
     }
 
     protected static int AddExp(ArrayList<Token> tokens, int i){
 
-        return MulExp(tokens, i);
+        i = MulExp(tokens, i);
+        while(tokens.get(i).getValue().equals("+") || tokens.get(i).getValue().equals("-")){
+            ++i;
+            i = MulExp(tokens, i);
+        }
+        return i;
     }
 
     protected static int MulExp(ArrayList<Token> tokens, int i){
-        return UnaryExp(tokens, i);
+        i = UnaryExp(tokens, i);
+        while(tokens.get(i).getValue().equals("*") || tokens.get(i).getValue().equals("/") || tokens.get(i).getValue().equals("%")){
+            ++i;
+            i = UnaryExp(tokens, i);
+        }
+        return i;
     }
 
     protected static int UnaryExp(ArrayList<Token> tokens, int i){
@@ -233,7 +244,7 @@ public class Parser {
             System.exit(-1);
         }
         return ++i;
-    }*/
+    }
 }
 
 

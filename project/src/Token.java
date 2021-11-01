@@ -18,10 +18,11 @@ public class Token {
         this.value = value;
     }
 
+    //判断是否是数字，如果是，顺便转换成十进制数。
     public boolean isNum(){
         if(this.getType().equals("decimal-const") || this.getType().equals("octal-const") || this.getType().equals("hexadecimal-const")){
             if (this.getType().equals("decimal-const")) {
-                this.setValue(this.getValue());
+                return true;
             } else if (this.getType().equals("hexadecimal-const")) {
                 this.setValue(Integer.parseInt(this.getValue().substring(2), 16) + "");
             } else{

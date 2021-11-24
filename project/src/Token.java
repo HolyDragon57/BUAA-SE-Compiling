@@ -1,6 +1,18 @@
 public class Token {
     private String type;
     private String value;
+    private Boolean isArray;
+
+    public Boolean getArray() {
+        return isArray;
+    }
+
+    public void setArray(Boolean array) {
+        isArray = array;
+    }
+//In special situations where being transmitted through the AST.
+    //Type means register
+    //Value means value
 
     public String getType() {
         return type;
@@ -18,7 +30,7 @@ public class Token {
         this.value = value;
     }
 
-    //判断是否是数字，如果是，顺便转换成十进制数。
+    //判断是否是数字，如果是，转换成十进制数。
     public boolean isNum(){
         if(this.getType().equals("decimal-const") || this.getType().equals("octal-const") || this.getType().equals("hexadecimal-const")){
             if (this.getType().equals("decimal-const")) {
@@ -29,13 +41,6 @@ public class Token {
                 this.setValue(Integer.parseInt(this.getValue().substring(1), 8) + "");
             }
             this.setType("decimal-const");
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isOpe(){
-        if(this.getValue().equals("+") || this.getValue().equals("-") || this.getValue().equals("*") || this.getValue().equals("/") || this.getValue().equals("%") || this.getValue().equals("(") || this.getValue().equals(")") || this.getValue().equals(";")){
             return true;
         }
         return false;

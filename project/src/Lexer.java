@@ -45,9 +45,9 @@ public class Lexer {
             }
             else {
                 pushbackReader.unread(c);
-                System.out.println("Get && or || error!");
-                System.exit(-1);
+                Bios.exit("Get && or || error!");
             }
+            return token;
         }
         else if(c == '/'){
             return removeNotes(pushbackReader);
@@ -56,8 +56,7 @@ public class Lexer {
             return null;
         }
         else {
-            System.out.println("Token format error!");
-            System.exit(-1);
+            Bios.exit("Token format error!");
         }
         return null;
     }
@@ -139,6 +138,7 @@ public class Lexer {
             c = (char)pushbackReader.read();
             while(c != '\n'){
                 int a = pushbackReader.read();
+                //If it's the end of the file. Ensure it's not a infinite loop.
                 if(a == -1){
                     c = (char)a;
                     break;
@@ -154,8 +154,7 @@ public class Lexer {
                 while (c != '*') {
                     int a = pushbackReader.read();
                     if (a == -1) {
-                        System.out.println("/* has no match!");
-                        System.exit(-1);
+                        Bios.exit("/* has no match!");
                     }
                     c = (char) a;
                 }

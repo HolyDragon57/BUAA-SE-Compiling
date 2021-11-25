@@ -30,9 +30,9 @@ public class VarDef {
                 Bios.fileWriter.write("\tstore i32 " + intVar.getValue() + ", i32* " + intVar.getAddressRegister()+"\n");
             else
                 Bios.fileWriter.write("\tstore i32 " + intVar.getValueRegister() + ", i32* " + intVar.getAddressRegister()+"\n");
-            String register = Bios.getRegister();
-            Bios.fileWriter.write("\t"+ register + " = load i32, i32* "+ intVar.getAddressRegister()+"\n");
-            intVar.setRegister(register);
+//            String register = Bios.getRegister();
+//            Bios.fileWriter.write("\t"+ register + " = load i32, i32* "+ intVar.getAddressRegister()+"\n");
+//            intVar.setRegister(register);
         }
         Bios.getCurrentBlockMarkList().insertInt(intVar);
     }

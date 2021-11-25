@@ -21,9 +21,6 @@ public class FuncRParams {
             token.setType(token.getType() == null ? token.getValue() : token.getType());
             tokens.add(token);
         }
-        if(tokens == null){
-            Bios.exit("Function params error!");
-        }
         return tokens;
     }
 }

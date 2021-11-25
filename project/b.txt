@@ -1,19 +1,11 @@
-declare i32 @getch()
-declare void @putch(i32)
+declare i32 @getint()
+declare void @putint(i32)
 define dso_local i32 @main(){
 	%x2 = alloca i32
-	%x3 = call i32 @getch()
+	%x3 = call i32 @getint()
 	store i32 %x3, i32* %x2
 	%x4 = load i32, i32* %x2
-	%x5 = alloca i32
-	%x6 = load i32, i32* %x5
-	%x7 = call i32 @getch()
-	call void @putch(i32 %x4)
-	call void @putch(i32 %x6)
-	call void @putch(i32 10)
-	%x8 = sub i32 %x4, 16
-	call void @putch(i32 %x8)
-	%x9 = add i32 %x6, 6
-	call void @putch(i32 %x9)
+	%x5 = add i32 %x4, 4
+	call void @putint(i32 %x5)
 	ret i32 0
 }

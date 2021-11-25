@@ -6,7 +6,7 @@ public class Stmt {
     private Exp exp;
     private boolean isReturn;
     protected void accept(ArrayList<Token> tokens){
-        if(tokens.get(Bios.index).getType().equals("ident") && tokens.get(Bios.index+1).getType().equals("=")){
+        if(tokens.get(Bios.index).getType().equals("ident") && tokens.get(Bios.index+1).getValue().equals("=")){
             LVal lval2 = new LVal();
             lval2.accept(tokens);
             this.lVal = lval2;
@@ -50,9 +50,11 @@ public class Stmt {
             intVar.setValue(Integer.parseInt(token.getValue()));
             token.setType(token.getType() == null ? token.getValue(): token.getType());
             Bios.fileWriter.write("\tstore i32 "+token.getType()+", i32* "+intVar.getAddressRegister()+"\n");
-            String register = Bios.getRegister();
-            Bios.fileWriter.write("\t"+ register + " = load i32, i32* "+ intVar.getAddressRegister()+"\n");
-            intVar.setRegister(register);
+            intVar.setRegister(token.getType());
+            intVar.setValueRegister(token.getType());
+//            String register = Bios.getRegister();
+//            Bios.fileWriter.write("\t"+ register + " = load i32, i32* "+ intVar.getAddressRegister()+"\n");
+//            intVar.setRegister(register);
         }
         else if(this.isReturn){
             Token token = this.exp.scan();

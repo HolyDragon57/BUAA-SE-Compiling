@@ -1,3 +1,14 @@
 int main() {
-    return 1 + (-2) * (3 / (4 - 5));
+    int n, m, num;
+    n = getint();
+    m = getint();
+    int rem;
+    while (n > 0) {
+        rem = m % n;
+        m = n;
+        n = rem;
+    }
+    num = m;
+    putint(num);
+    return 0;
 }

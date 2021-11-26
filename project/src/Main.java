@@ -7,15 +7,19 @@ public class Main {
         FileWriter fileWriter = new FileWriter(args[1]);
         PushbackReader pushbackReader = new PushbackReader(fileReader, 10);
 
-        Token token = Lexer.getToken(pushbackReader);
-        ArrayList<Token> tokens = new ArrayList<>();
-        while(token != null){
-            tokens.add(token);
-            token = Lexer.getToken(pushbackReader);
+        int c;
+        while((c = pushbackReader.read()) != -1){
+            System.out.print((char)c);
         }
-        for(Token token1: tokens){
-            System.out.print(token1.getValue() + " ");
-        }
+//        Token token = Lexer.getToken(pushbackReader);
+//        ArrayList<Token> tokens = new ArrayList<>();
+//        while(token != null){
+//            tokens.add(token);
+//            token = Lexer.getToken(pushbackReader);
+//        }
+//        for(Token token1: tokens){
+//            System.out.print(token1.getValue() + " ");
+//        }
         //Parser.CompUnit(tokens, 0);
         //IRgenerator.generate(tokens, fileWriter);
 

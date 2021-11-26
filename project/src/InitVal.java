@@ -12,4 +12,8 @@ public class InitVal {
     protected Token scan() throws IOException {
         return this.exp.scan();
     }
+
+    protected int getAns() throws IOException {
+        return this.exp.getAns();
+    }
 }

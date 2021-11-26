@@ -22,6 +22,6 @@ public class Block {
         for(int i = 0; i < this.blockItems.size(); i ++){
             this.blockItems.get(i).scan();
         }
-        //BlockMarkList.changeBlockMarkList();
+        BlockMarkList.changeBlockMarkList();
     }
 }

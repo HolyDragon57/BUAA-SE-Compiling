@@ -58,10 +58,15 @@ public class PrimaryExp {
         if(this.exp != null)
             return this.exp.getAns();
         else if(this.lVal != null){
-            return Bios.getCurrentBlockMarkList().getValue(this.lVal.scan());
+            if(Bios.getCurrentBlockMarkList().getType(this.lVal.scan()).equals("const")){
+                return Bios.getCurrentBlockMarkList().getValue(this.lVal.scan());
+            }
+            else
+                Bios.exit("Const expression appears variable!");
         }
         else{
             return this.num.getValue();
         }
+        return 0;
     }
 }

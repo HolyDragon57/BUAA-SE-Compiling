@@ -33,8 +33,4 @@ public class ConstDef {
 
         Bios.getCurrentBlockMarkList().insertConst(con);
     }
-
-    protected void scanGlobal() throws IOException{
-
-    }
 }

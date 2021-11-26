@@ -40,6 +40,17 @@ public class VarDef {
     }
 
     protected void scanGlobal() throws IOException{
-
+        IntVar intVar = new IntVar();
+        intVar.setAddressRegister("@x"+Bios.getNewIrId());
+        intVar.setName(this.ident.getName());
+        intVar.setValue(0);
+        if(Bios.getCurrentBlockMarkList().isRecorded(this.ident))
+            Bios.exit("The var has already been declared!");
+        if(this.initVal != null){
+            int value = this.initVal.getAns();
+            intVar.setValue(value);
+        }
+        Bios.fileWriter.write(intVar.getAddressRegister()+" = dso_local global i32 "+intVar.getValue()+"\n");
+        Bios.getCurrentBlockMarkList().insertInt(intVar);
     }
 }

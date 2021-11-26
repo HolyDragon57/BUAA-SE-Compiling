@@ -76,7 +76,7 @@ public class UnaryExp {
             else if(func.getReturnType().equals("int")){
                 token.setType(Bios.getRegister());
                 Bios.fileWriter.write("\t"+token.getType() + " = call i32 @"+func.getName()+"("+paramDecl+")\n");
-                token.setValue("0");
+                token.setValue("1");
             }
         }
         else{

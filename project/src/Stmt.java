@@ -154,6 +154,9 @@ public class Stmt {
             Bios.fileWriter.write("\tbr label %x"+area1+"\n");
             Bios.fileWriter.write("\nx"+area1+":\n");
             Token token = this.cond2.scan();
+            if(token.getType() == null){
+                token.setType(token.getValue());
+            }
             String register = Bios.getRegister();
             Bios.fileWriter.write("\t"+register+" = icmp ne i32 "+token.getType()+", 0\n");
             token.setType(register);
@@ -182,7 +185,8 @@ public class Stmt {
             this.block.scan();
         }
         else{
-            this.exp.scan();
+            if(this.exp != null)
+                this.exp.scan();
         }
     }
 }

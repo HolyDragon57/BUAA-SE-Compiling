@@ -27,4 +27,10 @@ public class VarDecl {
         }
     }
 
+    protected void scanGlobal() throws IOException {
+        for(int i = 0; i < this.varDefs.size(); i ++){
+            this.varDefs.get(i).scanGlobal();
+        }
+    }
+
 }

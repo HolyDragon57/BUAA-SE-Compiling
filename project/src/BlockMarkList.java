@@ -39,6 +39,12 @@ public class BlockMarkList {
         Bios.blockMarkLists.add(blockMarkList);
     }
 
+    static public void changeBlockMarkList(){
+        BlockMarkList blockMarkList = Bios.getCurrentBlockMarkList().getParent();
+        Bios.blockMarkLists.remove(Bios.getCurrentBlockMarkList());
+        Bios.setCurrentBlockId(blockMarkList.getBlockId());
+    }
+
     public void insertConst(ConVar con){
         Ident ident = new Ident();
         ident.setName(con.getName());
@@ -65,15 +71,11 @@ public class BlockMarkList {
     }
 
     public Boolean isRecorded(Ident ident){
-        BlockMarkList blockMarkList = this;
-        while(blockMarkList != null){
-            ArrayList<Ident> idents = blockMarkList.markList.getIdentList();
-            for (Ident value : idents) {
-                if (value.getName().equals(ident.getName())) {
-                    return true;
-                }
+        ArrayList<Ident> idents = this.markList.getIdentList();
+        for (Ident value : idents) {
+            if (value.getName().equals(ident.getName())) {
+                return true;
             }
-            blockMarkList = blockMarkList.getParent();
         }
         return false;
     }

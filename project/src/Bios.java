@@ -77,14 +77,14 @@ public class Bios {
                 break;
             case "<":
                 token.setValue(((Integer.parseInt(token1.getValue())) < (Integer.parseInt(token2.getValue())) ? 1 : 0) + "");
-                fileWriter.write("\t"+token.getType()+" = icmp sge i32 "+token1.getType()+", "+token2.getType()+"\n");
+                fileWriter.write("\t"+token.getType()+" = icmp slt i32 "+token1.getType()+", "+token2.getType()+"\n");
                 register = Bios.getRegister();
                 fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
                 token.setType(register);
                 break;
             case ">=":
                 token.setValue(((Integer.parseInt(token1.getValue())) >= (Integer.parseInt(token2.getValue())) ? 1 : 0) + "");
-                fileWriter.write("\t"+token.getType()+" = icmp slt i32 "+token1.getType()+", "+token2.getType()+"\n");
+                fileWriter.write("\t"+token.getType()+" = icmp sge i32 "+token1.getType()+", "+token2.getType()+"\n");
                 register = Bios.getRegister();
                 fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
                 token.setType(register);

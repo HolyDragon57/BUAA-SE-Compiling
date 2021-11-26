@@ -1,3 +1,5 @@
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -32,5 +34,9 @@ public class ConstDef {
         con.setValue(value);
 
         Bios.getCurrentBlockMarkList().insertConst(con);
+    }
+
+    protected void scanGlobal() throws IOException{
+
     }
 }

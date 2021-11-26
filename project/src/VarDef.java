@@ -21,6 +21,8 @@ public class VarDef {
         IntVar intVar = new IntVar();
         intVar.setAddressRegister(Bios.getRegister());
         intVar.setName(this.ident.getName());
+        if(Bios.getCurrentBlockMarkList().isRecorded(this.ident))
+            Bios.exit("The var has already been declared!");
         Bios.fileWriter.write("\t" + intVar.getAddressRegister() + " = alloca i32\n");
         if(this.initVal != null){
             Token token = this.initVal.scan();
@@ -35,5 +37,9 @@ public class VarDef {
 //            intVar.setRegister(register);
         }
         Bios.getCurrentBlockMarkList().insertInt(intVar);
+    }
+
+    protected void scanGlobal() throws IOException{
+
     }
 }

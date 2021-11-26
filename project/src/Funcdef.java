@@ -23,7 +23,6 @@ public class Funcdef {
     }
 
     protected void scan() throws IOException {
-        BlockMarkList.createBlockMarkList(); //The global variable marklist
         Bios.declareFunctions();
         Bios.fileWriter.write("define dso_local i32 @main()");
         Bios.fileWriter.write("{\n");

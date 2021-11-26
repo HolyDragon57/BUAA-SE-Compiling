@@ -24,4 +24,12 @@ public class Decl {
             this.varDecl.scan();
         }
     }
+    protected void scanGlobal() throws IOException {
+        if(this.constDecl != null){
+            this.constDecl.scanGlobal();
+        }
+        else{
+            this.varDecl.scanGlobal();
+        }
+    }
 }

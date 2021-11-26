@@ -12,6 +12,8 @@ public class Bios {
     static int currentBlockId = -1;
     static ArrayList<Func> declareFuncs = new ArrayList<>();
 
+    static ArrayList<String> whiles = new ArrayList<>();
+
     static void exit(String errorMsg){
         System.out.println(errorMsg);
         System.exit(-1);

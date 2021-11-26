@@ -9,6 +9,10 @@ public class Stmt {
     private Cond cond;
     private Stmt stmt1;
     private Stmt stmt2;
+    private Cond cond2;
+    private Stmt stmt3;
+    private boolean isBreak;
+    private boolean isContinue;
     protected void accept(ArrayList<Token> tokens){
         if(tokens.get(Bios.index).getType().equals("ident") && tokens.get(Bios.index+1).getValue().equals("=")){
             LVal lval2 = new LVal();
@@ -49,6 +53,35 @@ public class Stmt {
                 stmt3.accept(tokens);
                 this.stmt2 = stmt3;
             }
+        }
+        else if(tokens.get(Bios.index).getValue().equals("while")){
+            Bios.addIndex();
+            if(!tokens.get(Bios.index).getValue().equals("("))
+                Bios.exit("While () error!");
+            Bios.addIndex();
+            Cond cond3 = new Cond();
+            cond3.accept(tokens);
+            this.cond2 = cond3;
+            if(!tokens.get(Bios.index).getValue().equals(")"))
+                Bios.exit("While () error!");
+            Bios.addIndex();
+            Stmt stmt = new Stmt();
+            stmt.accept(tokens);
+            this.stmt3 = stmt;
+        }
+        else if(tokens.get(Bios.index).getValue().equals("break")){
+            Bios.addIndex();
+            if(!tokens.get(Bios.index).getValue().equals(";"))
+                Bios.exit("Break ; error!");
+            Bios.addIndex();
+            this.isBreak = true;
+        }
+        else if(tokens.get(Bios.index).getValue().equals("continue")){
+            Bios.addIndex();
+            if(!tokens.get(Bios.index).getValue().equals(";"))
+                Bios.exit("Continue ; error!");
+            Bios.addIndex();
+            this.isContinue = true;
         }
         else if(tokens.get(Bios.index).getValue().equals("return")){
             this.isReturn = true;
@@ -111,6 +144,34 @@ public class Stmt {
                 Bios.fileWriter.write("\tbr label %x"+area3+"\n");
                 Bios.fileWriter.write("\nx"+area3+":\n");
             }
+        }
+        else if(this.cond2 != null){
+            String area1 = Bios.getNewIrId()+"";
+            String area2 = Bios.getNewIrId()+"";
+            String area3 = Bios.getNewIrId()+"";
+            Bios.whiles.add(area1);
+            Bios.whiles.add(area3);
+            Bios.fileWriter.write("\tbr label %x"+area1+"\n");
+            Bios.fileWriter.write("\nx"+area1+":\n");
+            Token token = this.cond2.scan();
+            String register = Bios.getRegister();
+            Bios.fileWriter.write("\t"+register+" = icmp ne i32 "+token.getType()+", 0\n");
+            token.setType(register);
+            Bios.fileWriter.write("\tbr i1 "+token.getType()+", label %x"+area2+", label %x"+area3+"\n");
+            Bios.fileWriter.write("\nx"+area2+":\n");
+            this.stmt3.scan();
+            Bios.fileWriter.write("\tbr label %x"+area1+"\n");
+            Bios.fileWriter.write("\nx"+area3+":\n");
+        }
+        else if(this.isBreak){
+            String register = "%x" + Bios.whiles.get(Bios.whiles.size()-1);
+            Bios.fileWriter.write("\tbr label "+register+"\n");
+            Bios.whiles.remove(Bios.whiles.size()-1);
+            Bios.whiles.remove(Bios.whiles.size()-1);
+        }
+        else if(this.isContinue){
+            String register = "%x" + Bios.whiles.get(Bios.whiles.size()-2);
+            Bios.fileWriter.write("\tbr label "+register+"\n");
         }
         else if(this.isReturn){
             Token token = this.exp.scan();

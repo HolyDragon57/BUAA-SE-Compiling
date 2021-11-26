@@ -5,6 +5,10 @@ public class Stmt {
     private LVal lVal;
     private Exp exp;
     private boolean isReturn;
+    private Block block;
+    private Cond cond;
+    private Stmt stmt1;
+    private Stmt stmt2;
     protected void accept(ArrayList<Token> tokens){
         if(tokens.get(Bios.index).getType().equals("ident") && tokens.get(Bios.index+1).getValue().equals("=")){
             LVal lval2 = new LVal();
@@ -19,6 +23,32 @@ public class Stmt {
             if(!tokens.get(Bios.index).getValue().equals(";"))
                 Bios.exit("Stmt ; error!");
             Bios.addIndex();
+        }
+        else if(tokens.get(Bios.index).getValue().equals("{") ){
+            Block block2 = new Block();
+            block2.accept(tokens);
+            this.block = block2;
+        }
+        else if(tokens.get(Bios.index).getValue().equals("if")){
+            Bios.addIndex();
+            if(!tokens.get(Bios.index).getValue().equals("("))
+                Bios.exit("If () error!");
+            Bios.addIndex();
+            Cond cond2 = new Cond();
+            cond2.accept(tokens);
+            this.cond = cond2;
+            if(!tokens.get(Bios.index).getValue().equals(")"))
+                Bios.exit("If () error!");
+            Bios.addIndex();
+            Stmt stmt = new Stmt();
+            stmt.accept(tokens);
+            this.stmt1 = stmt;
+            if(tokens.get(Bios.index).getValue().equals("else")){
+                Bios.addIndex();
+                Stmt stmt3 = new Stmt();
+                stmt3.accept(tokens);
+                this.stmt2 = stmt3;
+            }
         }
         else if(tokens.get(Bios.index).getValue().equals("return")){
             this.isReturn = true;
@@ -56,10 +86,39 @@ public class Stmt {
 //            Bios.fileWriter.write("\t"+ register + " = load i32, i32* "+ intVar.getAddressRegister()+"\n");
 //            intVar.setRegister(register);
         }
+        else if(this.cond != null){
+            Token token = this.cond.scan();
+            String register = Bios.getRegister();
+            Bios.fileWriter.write("\t"+register+" = icmp ne i32 "+token.getType()+", 0\n");
+            token.setType(register);
+            String area1 = Bios.getNewIrId()+"";
+            String area3 = Bios.getNewIrId()+"";
+            if(this.stmt2 != null){
+                String area2 = Bios.getNewIrId()+"";
+                Bios.fileWriter.write("\tbr i1 "+token.getType()+", label %x"+area1+", label %x"+area2+"\n");
+                Bios.fileWriter.write("\nx"+area1+":\n");
+                this.stmt1.scan();
+                Bios.fileWriter.write("\tbr label %x"+area3+"\n");
+                Bios.fileWriter.write("\nx"+area2+":\n");
+                this.stmt2.scan();
+                Bios.fileWriter.write("\tbr label %x"+area3+"\n");
+                Bios.fileWriter.write("\nx"+area3+":\n");
+            }
+            else{
+                Bios.fileWriter.write("\tbr i1 "+token.getType()+", label %x"+area1+", label %x"+area3+"\n");
+                Bios.fileWriter.write("\nx"+area1+":\n");
+                this.stmt1.scan();
+                Bios.fileWriter.write("\tbr label %x"+area3+"\n");
+                Bios.fileWriter.write("\nx"+area3+":\n");
+            }
+        }
         else if(this.isReturn){
             Token token = this.exp.scan();
             token.setType(token.getType() == null ? token.getValue(): token.getType());
             Bios.fileWriter.write("\tret i32 "+token.getType()+"\n");
+        }
+        else if(this.block != null){
+            this.block.scan();
         }
         else{
             this.exp.scan();

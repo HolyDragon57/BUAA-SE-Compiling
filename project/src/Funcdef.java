@@ -26,6 +26,8 @@ public class Funcdef {
         BlockMarkList.createBlockMarkList(); //The global variable marklist
         Bios.declareFunctions();
         Bios.fileWriter.write("define dso_local i32 @main()");
+        Bios.fileWriter.write("{\n");
         this.block.scan();
+        Bios.fileWriter.write("}\n");
     }
 }

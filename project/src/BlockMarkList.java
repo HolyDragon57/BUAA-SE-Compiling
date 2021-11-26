@@ -55,49 +55,71 @@ public class BlockMarkList {
         this.markList.getIntVarList().add(intVar);
     }
 
-    public Boolean isRecorded(Ident ident){
-        ArrayList<Ident> idents = this.markList.getIdentList();
-        for (Ident value : idents) {
-            if (value.getName().equals(ident.getName())) {
-                return true;
+    public BlockMarkList getParent(){
+        for(int i = 0; i < Bios.blockMarkLists.size(); i ++){
+            if(Bios.blockMarkLists.get(i).getBlockId() == this.getParentBlockId()){
+                return Bios.blockMarkLists.get(i);
             }
+        }
+        return null;
+    }
+
+    public Boolean isRecorded(Ident ident){
+        BlockMarkList blockMarkList = this;
+        while(blockMarkList != null){
+            ArrayList<Ident> idents = blockMarkList.markList.getIdentList();
+            for (Ident value : idents) {
+                if (value.getName().equals(ident.getName())) {
+                    return true;
+                }
+            }
+            blockMarkList = blockMarkList.getParent();
         }
         return false;
     }
 
     public Boolean isVar(Ident ident){
-        if(getType(ident).equals("integer")){
-            return true;
-        }
-        return false;
+        return getType(ident).equals("integer");
     }
 
     public String getType(Ident ident){
-        ArrayList<Ident> idents = this.markList.getIdentList();
-        for (Ident value : idents) {
-            if (value.getName().equals(ident.getName())) {
-                return value.getType();
+        BlockMarkList blockMarkList = this;
+        while(blockMarkList != null){
+            ArrayList<Ident> idents = blockMarkList.markList.getIdentList();
+            for (Ident value : idents) {
+                if (value.getName().equals(ident.getName())) {
+                    return value.getType();
+                }
             }
+            blockMarkList = blockMarkList.getParent();
         }
         return null;
     }
 
     public ConVar getConst(Ident ident){
-        ArrayList<ConVar> conVars = this.markList.getConstList();
-        for(ConVar conVar: conVars){
-            if(conVar.getName().equals(ident.getName())){
-                return conVar;
+        BlockMarkList blockMarkList = this;
+        while(blockMarkList != null){
+            ArrayList<ConVar> conVars = blockMarkList.markList.getConstList();
+            for (ConVar conVar: conVars) {
+                if (conVar.getName().equals(ident.getName())) {
+                    return conVar;
+                }
             }
+            blockMarkList = blockMarkList.getParent();
         }
         return null;
     }
 
     public IntVar getVar(Ident ident){
-        ArrayList<IntVar> intVars = this.markList.getIntVarList();
-        for (IntVar intVar : intVars) {
-            if (intVar.getName().equals(ident.getName())) {
-                return intVar;
+        BlockMarkList blockMarkList = this;
+        while(blockMarkList != null){
+            ArrayList<IntVar> intVars = blockMarkList.markList.getIntVarList();
+            for (IntVar intVar: intVars) {
+                if (intVar.getName().equals(ident.getName())) {
+                    return intVar;
+                }
             }
+            blockMarkList = blockMarkList.getParent();
         }
         return null;
     }

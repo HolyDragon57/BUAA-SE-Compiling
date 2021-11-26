@@ -19,10 +19,8 @@ public class Block {
 
     protected void scan() throws IOException {
         BlockMarkList.createBlockMarkList();
-        Bios.fileWriter.write("{\n");
         for(int i = 0; i < this.blockItems.size(); i ++){
             this.blockItems.get(i).scan();
         }
-        Bios.fileWriter.write("}");
     }
 }

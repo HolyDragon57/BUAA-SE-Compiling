@@ -39,7 +39,7 @@ public class PrimaryExp {
             }
             else if(Bios.getCurrentBlockMarkList().getType(ident).equals("integer")){
                 IntVar intVar = Bios.getCurrentBlockMarkList().getVar(ident);
-                if(intVar.getValueRegister() != null) {
+                if(intVar.getAddressRegister() != null) {
                     String register = Bios.getRegister();
                     Bios.fileWriter.write("\t" + register + " = load i32, i32* " + intVar.getAddressRegister() + "\n");
                     intVar.setRegister(register);

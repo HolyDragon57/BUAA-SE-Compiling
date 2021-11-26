@@ -46,6 +46,7 @@ public class Bios {
         token.setType(Bios.getRegister());
         token1.setType(token1.getType() == null ? token1.getValue() : token1.getType());
         token2.setType(token2.getType() == null ? token2.getValue() : token2.getType());
+        String register;
         switch (ope){
             case "+":
                 token.setValue((Integer.parseInt(token1.getValue())+Integer.parseInt(token2.getValue()))+"");
@@ -67,6 +68,55 @@ public class Bios {
                 token.setValue((Integer.parseInt(token1.getValue())%Integer.parseInt(token2.getValue()))+"");
                 fileWriter.write("\t"+token.getType()+" = srem i32 "+token1.getType()+", "+token2.getType()+"\n");
                 break;
+            case ">":
+                token.setValue(((Integer.parseInt(token1.getValue())) > (Integer.parseInt(token2.getValue())) ? 1 : 0) + "");
+                fileWriter.write("\t"+token.getType()+" = icmp sgt i32 "+token1.getType()+", "+token2.getType()+"\n");
+                register = Bios.getRegister();
+                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
+                token.setType(register);
+                break;
+            case "<":
+                token.setValue(((Integer.parseInt(token1.getValue())) < (Integer.parseInt(token2.getValue())) ? 1 : 0) + "");
+                fileWriter.write("\t"+token.getType()+" = icmp sge i32 "+token1.getType()+", "+token2.getType()+"\n");
+                register = Bios.getRegister();
+                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
+                token.setType(register);
+                break;
+            case ">=":
+                token.setValue(((Integer.parseInt(token1.getValue())) >= (Integer.parseInt(token2.getValue())) ? 1 : 0) + "");
+                fileWriter.write("\t"+token.getType()+" = icmp slt i32 "+token1.getType()+", "+token2.getType()+"\n");
+                register = Bios.getRegister();
+                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
+                token.setType(register);
+                break;
+            case "<=":
+                token.setValue(((Integer.parseInt(token1.getValue())) <= (Integer.parseInt(token2.getValue())) ? 1 : 0) + "");
+                fileWriter.write("\t"+token.getType()+" = icmp sle i32 "+token1.getType()+", "+token2.getType()+"\n");
+                register = Bios.getRegister();
+                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
+                token.setType(register);
+                break;
+            case "==":
+                token.setValue(((Integer.parseInt(token1.getValue())) == (Integer.parseInt(token2.getValue())) ? 1 : 0) + "");
+                fileWriter.write("\t"+token.getType()+" = icmp eq i32 "+token1.getType()+", "+token2.getType()+"\n");
+                register = Bios.getRegister();
+                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
+                token.setType(register);
+                break;
+            case "!=":
+                token.setValue(((Integer.parseInt(token1.getValue())) != (Integer.parseInt(token2.getValue())) ? 1 : 0) + "");
+                fileWriter.write("\t"+token.getType()+" = icmp ne i32 "+token1.getType()+", "+token2.getType()+"\n");
+                register = Bios.getRegister();
+                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
+                token.setType(register);
+                break;
+            case "!":
+                token.setValue(((Integer.parseInt(token2.getValue())) == 0 ? 1 : 0) + "");
+                fileWriter.write("\t"+token.getType()+" = icmp eq i32 "+token2.getType()+", 0\n");
+                register = Bios.getRegister();
+                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
+                token.setType(register);
+                break;
             default:
                 Bios.exit("Basic calculation error!");
         }
@@ -85,6 +135,14 @@ public class Bios {
                 return a / b;
             case "%":
                 return a % b;
+            case ">":
+                return a > b ? 1 : 0;
+            case "<":
+                return a < b ? 1 : 0;
+            case ">=":
+                return a >= b ? 1 : 0;
+            case "<=":
+                return a <= b ? 1 : 0;
             default:
                 exit("Simple calculation error!");
         }

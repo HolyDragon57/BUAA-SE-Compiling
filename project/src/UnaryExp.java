@@ -8,7 +8,7 @@ public class UnaryExp {
     private Ident ident;
     private FuncRParams funcRParams;
     protected void accept(ArrayList<Token> tokens){
-        if(tokens.get(Bios.index).getValue().equals("+") || tokens.get(Bios.index).getValue().equals("-")){
+        if(tokens.get(Bios.index).getValue().equals("+") || tokens.get(Bios.index).getValue().equals("-") || tokens.get(Bios.index).getValue().equals("!")){
             UnaryOp unaryOp2 = new UnaryOp();
             unaryOp2.accept(tokens);
             this.unaryOp = unaryOp2;
@@ -85,8 +85,11 @@ public class UnaryExp {
             token1.setValue("0");
             if(this.unaryOp.getValue().equals("+"))
                 token = Bios.calculate(token1, token2, "+");
-            else
+            else if(this.unaryOp.getValue().equals("-"))
                 token = Bios.calculate(token1, token2, "-");
+            else{
+                token = Bios.calculate(token1, token2, "!");
+            }
         }
         return token;
     }

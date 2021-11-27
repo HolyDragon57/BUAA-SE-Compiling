@@ -165,12 +165,12 @@ public class Stmt {
             this.stmt3.scan();
             Bios.fileWriter.write("\tbr label %x"+area1+"\n");
             Bios.fileWriter.write("\nx"+area3+":\n");
+            Bios.whiles.remove(Bios.whiles.size()-1);
+            Bios.whiles.remove(Bios.whiles.size()-1);
         }
         else if(this.isBreak){
             String register = "%x" + Bios.whiles.get(Bios.whiles.size()-1);
             Bios.fileWriter.write("\tbr label "+register+"\n");
-            Bios.whiles.remove(Bios.whiles.size()-1);
-            Bios.whiles.remove(Bios.whiles.size()-1);
         }
         else if(this.isContinue){
             String register = "%x" + Bios.whiles.get(Bios.whiles.size()-2);

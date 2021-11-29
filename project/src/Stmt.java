@@ -152,8 +152,8 @@ public class Stmt {
                 }
                 String register4 = Bios.getRegister();
                 Bios.fileWriter.write("\t"+register4+" = getelementptr i32, i32* "+array.getRegister()+", i32 "+register1+"\n");
-                String register3 = Bios.getRegister();
-                Bios.fileWriter.write("\t" + register3 + " = load i32, i32* " + register4 + "\n");
+                //String register3 = Bios.getRegister();
+                //Bios.fileWriter.write("\t" + register3 + " = load i32, i32* " + register4 + "\n");
 
                 Token token = this.exp.scan();
                 token.setType(token.getType() == null ? token.getValue() : token.getType());

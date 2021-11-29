@@ -61,6 +61,14 @@ public class BlockMarkList {
         this.markList.getIntVarList().add(intVar);
     }
 
+    public void insertArray(Array array){
+        Ident ident = new Ident();
+        ident.setName(array.getName());
+        ident.setType("array");
+        this.markList.getIdentList().add(ident);
+        this.markList.getArrayList().add(array);
+    }
+
     public BlockMarkList getParent(){
         for(int i = 0; i < Bios.blockMarkLists.size(); i ++){
             if(Bios.blockMarkLists.get(i).getBlockId() == this.getParentBlockId()){
@@ -119,6 +127,20 @@ public class BlockMarkList {
             for (IntVar intVar: intVars) {
                 if (intVar.getName().equals(ident.getName())) {
                     return intVar;
+                }
+            }
+            blockMarkList = blockMarkList.getParent();
+        }
+        return null;
+    }
+
+    public Array getArray(Ident ident){
+        BlockMarkList blockMarkList = this;
+        while(blockMarkList != null){
+            ArrayList<Array> arrays = blockMarkList.markList.getArrayList();
+            for (Array array: arrays) {
+                if (array.getName().equals(ident.getName())) {
+                    return array;
                 }
             }
             blockMarkList = blockMarkList.getParent();

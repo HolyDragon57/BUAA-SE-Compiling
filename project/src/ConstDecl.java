@@ -31,4 +31,11 @@ public class ConstDecl {
             this.constDefs.get(i).scan();
         }
     }
+
+    protected void scanGlobal() throws IOException {
+        //No need to assign register for const. Just put it into the mark list.
+        for(int i = 0; i < this.constDefs.size(); i ++){
+            this.constDefs.get(i).scanGlobal();
+        }
+    }
 }

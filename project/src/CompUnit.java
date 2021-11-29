@@ -18,11 +18,13 @@ public class CompUnit {
     }
 
     protected void scan() throws IOException {
+        Bios.declareFunctions();
         if(this.decls.size() != 0){
             for(Decl decl: this.decls){
                 decl.scanGlobal();
             }
         }
+        Bios.fileWriter.write("\n");
         this.funcdef.scan();
     }
 }

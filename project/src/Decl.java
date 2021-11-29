@@ -26,7 +26,7 @@ public class Decl {
     }
     protected void scanGlobal() throws IOException {
         if(this.constDecl != null){
-            this.constDecl.scan();
+            this.constDecl.scanGlobal();
         }
         else{
             this.varDecl.scanGlobal();

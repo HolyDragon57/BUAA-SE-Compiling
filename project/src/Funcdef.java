@@ -23,7 +23,6 @@ public class Funcdef {
     }
 
     protected void scan() throws IOException {
-        Bios.declareFunctions();
         Bios.fileWriter.write("define dso_local i32 @main()");
         Bios.fileWriter.write("{\n");
         this.block.scan();

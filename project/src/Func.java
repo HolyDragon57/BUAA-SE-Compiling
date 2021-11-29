@@ -49,7 +49,7 @@ public class Func {
     }
 
     public static Boolean isLibFunc(Ident ident){
-        if(ident.getName().equals("getint") || ident.getName().equals("getch") || ident.getName().equals("putint") || ident.getName().equals("putch"))
+        if(ident.getName().equals("getint") || ident.getName().equals("getch") || ident.getName().equals("putint") || ident.getName().equals("putch") || ident.getName().equals("memset"))
             return true;
         return false;
     }
@@ -80,6 +80,13 @@ public class Func {
                 func.setName("putch");
                 func.setReturnType("void");
                 func.setParamNum(1);
+                if(!Bios.isDeclared(func))
+                    Bios.declareFuncs.add(func);
+                break;
+            case "memset":
+                func.setName("memset");
+                func.setReturnType("void");
+                func.setParamNum(3);
                 if(!Bios.isDeclared(func))
                     Bios.declareFuncs.add(func);
                 break;

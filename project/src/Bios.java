@@ -161,6 +161,7 @@ public class Bios {
     }
 
     public static void declareFunctions() throws IOException {
+
         for(Func func: declareFuncs){
             if(func.getName().equals("getint")){
                 Bios.fileWriter.write("declare i32 @getint()\n");
@@ -175,5 +176,15 @@ public class Bios {
                 Bios.fileWriter.write("declare void @putch(i32)\n");
             }
         }
+        Bios.fileWriter.write("declare void @memset(i32*, i32, i32)\n\n");
+    }
+
+    //The layers that closest to the center
+    public static void arrayType(Array array, int dim) throws IOException {
+        for(int j = 0; j < dim; j ++)
+            Bios.fileWriter.write("["+array.getDim().get(j+array.getDims()-dim)+" x ");
+        Bios.fileWriter.write("i32");
+        for(int j = 0; j < dim; j ++)
+            Bios.fileWriter.write("]");
     }
 }

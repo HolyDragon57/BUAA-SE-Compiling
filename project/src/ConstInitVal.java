@@ -40,7 +40,7 @@ public class ConstInitVal {
             int j = 0;
             ++i;
             for(ConstInitVal constInitVal: constInitVals){
-                pos = j * (array.getTotal()/array.getDim().get(i-1));
+                pos = j * array.getDim().get(i-1);
                 constInitVal.scanArray(array, i, pos);
                 j ++;
             }

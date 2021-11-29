@@ -41,7 +41,7 @@ public class InitVal {
             int j = 0;
             ++i;
             for(InitVal initVal: initVals){
-                pos = j * (array.getTotal()/array.getDim().get(i-1));
+                pos = j * array.getDim().get(i-1);
                 initVal.scanArray(array, i, pos);
                 j ++;
             }

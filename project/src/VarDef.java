@@ -140,7 +140,7 @@ public class VarDef {
             Bios.fileWriter.write(array.getAddressRegister()+" = dso_local global ");
             Bios.arrayType(array, array.getDims());
 
-            if(this.initVal != null) {
+            if(this.initVal != null && this.initVal.getInitVals().size() != 0) {
                 Bios.fileWriter.write(" ");
                 this.initVal.scanGlobalArray(array, 1, 0);
                 Bios.fileWriter.write("\n");

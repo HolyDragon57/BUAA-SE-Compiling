@@ -72,7 +72,7 @@ public class ConstInitVal {
                 Bios.fileWriter.write(" ");
                 pos = j * array.getDim().get(i - 1);//problems here
                 constInitVal.scanGlobalArray(array, i, pos);
-                if(j < array.getDim().get(i - 1)){
+                if(j < array.getDim().get(0) - 1){
                     Bios.fileWriter.write(", ");
                 }
                 j++;

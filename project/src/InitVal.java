@@ -4,6 +4,15 @@ import java.util.ArrayList;
 public class InitVal {
     private Exp exp;
     private ArrayList<InitVal> initVals = new ArrayList<>();
+
+    public ArrayList<InitVal> getInitVals() {
+        return initVals;
+    }
+
+    public void setInitVals(ArrayList<InitVal> initVals) {
+        this.initVals = initVals;
+    }
+
     protected void accept(ArrayList<Token> tokens){
         if(!tokens.get(Bios.index).getValue().equals("{")) {
             Exp exp2 = new Exp();
@@ -74,7 +83,7 @@ public class InitVal {
                 Bios.fileWriter.write(" ");
                 pos = j * array.getDim().get(i - 1);//problems here
                 initVal.scanGlobalArray(array, i, pos);
-                if(j < array.getDim().get(i - 1)){
+                if(j < array.getDim().get(0) - 1){
                     Bios.fileWriter.write(", ");
                 }
                 j++;

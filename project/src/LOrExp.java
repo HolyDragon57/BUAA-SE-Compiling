@@ -19,12 +19,21 @@ public class LOrExp {
         Token token = new Token();
         if(lAndExps.size() == 1)
             return lAndExps.get(0).scan();
-        for(LAndExp lAndExp: lAndExps){
-            token = lAndExp.scan();
-            if(token.getValue().equals("1")){
-                return token;
-            }
+        token = lAndExps.get(0).scan();
+        for(int i = 1; i < lAndExps.size(); i ++){
+            Token token1 = lAndExps.get(i).scan();
+            String register = Bios.getRegister();
+            Bios.fileWriter.write("\t"+register+" = or i32 "+token.getType()+", "+token1.getType()+"\n");
+//            String register2 = Bios.getRegister();
+//            Bios.fileWriter.write("\t"+register2+" = zext i1 "+register+" to i32\n");
+            token.setType(register);
         }
+//        for(LAndExp lAndExp: lAndExps){
+//            token = lAndExp.scan();
+//            if(token.getValue().equals("1")){
+//                return token;
+//            }
+//        }
 //        token.setValue("0");
 //        token.setType(Bios.getRegister());
         return token;

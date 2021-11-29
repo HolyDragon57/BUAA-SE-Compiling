@@ -20,12 +20,21 @@ public class LAndExp {
         if(eqExps.size() == 1){
             return eqExps.get(0).scan();
         }
-        for(EqExp eqExp: eqExps){
-            token = eqExp.scan();
-            if(token.getValue().equals("0")){
-                return token;
-            }
+        token = eqExps.get(0).scan();
+        for(int i = 1; i < eqExps.size(); i ++){
+            Token token1 = eqExps.get(i).scan();
+            String register = Bios.getRegister();
+            Bios.fileWriter.write("\t"+register+" = and i32 "+token.getType()+", "+token1.getType()+"\n");
+//            String register2 = Bios.getRegister();
+//            Bios.fileWriter.write("\t"+register2+" = zext i1 "+register+" to i32\n");
+            token.setType(register);
         }
+//        for(EqExp eqExp: eqExps){
+//            token = eqExp.scan();
+//            if(token.getValue().equals("0")){
+//                return token;
+//            }
+//        }
         return token;
     }
 }

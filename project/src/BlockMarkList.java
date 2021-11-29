@@ -89,7 +89,7 @@ public class BlockMarkList {
     }
 
     public Boolean isVar(Ident ident){
-        return getType(ident).equals("integer");
+        return getType(ident).equals("integer") || getType(ident).equals("array");
     }
 
     public String getType(Ident ident){

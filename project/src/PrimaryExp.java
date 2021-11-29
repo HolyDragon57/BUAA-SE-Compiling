@@ -60,23 +60,25 @@ public class PrimaryExp {
                     array.setRegister(register);
                 }
 
-                ArrayList<Integer> values = new ArrayList<>();
+                ArrayList<Token> values = new ArrayList<>();
                 for(Exp exp: this.lVal.getExps()){
-                    values.add(exp.getAns());
+                    Token token1 = exp.scan();
+                    token1.setType(token1.getType() == null ? token1.getValue() : token1.getType());
+                    values.add(token1);
                 }
 
                 String register1 = Bios.getRegister();
                 String register2;
                 int pos = 0;
-                Bios.fileWriter.write("\t"+register1+" = add i32 0, "+values.get(0)+"\n");
-                pos += values.get(0);
+                Bios.fileWriter.write("\t"+register1+" = add i32 0, "+values.get(0).getType()+"\n");
+                pos += Integer.parseInt(values.get(0).getValue());
                 for(int i = 1; i < array.getDims(); i ++){
                     register2 = Bios.getRegister();
                     Bios.fileWriter.write("\t"+register2+" = mul i32 "+register1+", "+array.getDim().get(i)+"\n");
                     register1 = Bios.getRegister();
-                    Bios.fileWriter.write("\t"+register1+" = add i32 "+register2+", "+values.get(i)+"\n");
+                    Bios.fileWriter.write("\t"+register1+" = add i32 "+register2+", "+values.get(i).getType()+"\n");
                     pos *= array.getDim().get(i);
-                    pos += values.get(i);
+                    pos += Integer.parseInt(values.get(i).getValue());
                 }
                 String register4 = Bios.getRegister();
                 Bios.fileWriter.write("\t"+register4+" = getelementptr i32, i32* "+array.getRegister()+", i32 "+register1+"\n");

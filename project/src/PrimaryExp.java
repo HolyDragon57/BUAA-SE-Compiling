@@ -85,7 +85,8 @@ public class PrimaryExp {
                 String register3 = Bios.getRegister();
                 Bios.fileWriter.write("\t" + register3 + " = load i32, i32* " + register4 + "\n");
                 token.setType(register3);
-                token.setValue(array.getArrayElems().get(pos).getValue()+"");
+//                token.setValue(array.getArrayElems().get(pos).getValue()+"");
+                token.setValue("1");
             }
         }
         else{

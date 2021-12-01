@@ -11,7 +11,7 @@ public class Bios {
     //0 stands for global variable. -1 is 0's father.
     static int currentBlockId = -1;
     static ArrayList<Func> declareFuncs = new ArrayList<>();
-
+    static boolean hasMain;
     static ArrayList<String> whiles = new ArrayList<>();
 
     static void exit(String errorMsg){
@@ -63,10 +63,12 @@ public class Bios {
                 fileWriter.write("\t"+token.getType()+" = mul i32 "+token1.getType()+", "+token2.getType()+"\n");
                 break;
             case "/":
+                token2.setValue("1");
                 token.setValue((Integer.parseInt(token1.getValue())/Integer.parseInt(token2.getValue()))+"");
                 fileWriter.write("\t"+token.getType()+" = sdiv i32 "+token1.getType()+", "+token2.getType()+"\n");
                 break;
             case "%":
+                token2.setValue("1");
                 token.setValue((Integer.parseInt(token1.getValue())%Integer.parseInt(token2.getValue()))+"");
                 fileWriter.write("\t"+token.getType()+" = srem i32 "+token1.getType()+", "+token2.getType()+"\n");
                 break;
@@ -174,6 +176,12 @@ public class Bios {
             }
             else if(func.getName().equals("putch")){
                 Bios.fileWriter.write("declare void @putch(i32)\n");
+            }
+            else if(func.getName().equals("getarray")){
+                Bios.fileWriter.write("declare i32 @getarray(i32*)\n");
+            }
+            else if(func.getName().equals("putarray")){
+                Bios.fileWriter.write("declare void @putarray(i32, i32*)\n");
             }
         }
         Bios.fileWriter.write("declare void @memset(i32*, i32, i32)\n\n");

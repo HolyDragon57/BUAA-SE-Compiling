@@ -8,6 +8,7 @@ public class FuncRParams {
         exp.accept(tokens);
         this.exps.add(exp);
         while (tokens.get(Bios.index).getValue().equals(",")){
+            Bios.addIndex();
             Exp exp2 = new Exp();
             exp2.accept(tokens);
             this.exps.add(exp2);

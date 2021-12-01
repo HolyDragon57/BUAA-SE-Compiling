@@ -8,6 +8,15 @@ public class Array {
     private ArrayList<Integer> dim = new ArrayList<>();
     private String addressRegister;
     private ArrayList<ArrayElem> arrayElems = new ArrayList<>();
+    private boolean undefined;
+
+    public boolean isUndefined() {
+        return undefined;
+    }
+
+    public void setUndefined(boolean undefined) {
+        this.undefined = undefined;
+    }
 
     public String getRegister() {
         return register;

@@ -1,258 +1,40 @@
-declare i32 @getint()
-declare i32 @getch()
-declare void @putch(i32)
+declare void @putint(i32)
 declare void @memset(i32*, i32, i32)
 
-@x1 = dso_local global [65536 x i32] zeroinitializer
-@x2 = dso_local global [32768 x i32] zeroinitializer
-@x3 = dso_local global i32 0
+define dso_local i32 @gcd(i32 %x2, i32 %x4){
+	%x3 = alloca i32
+	store i32 %x2, i32* %x3
+	%x5 = alloca i32
+	store i32 %x4, i32* %x5
+	%x7 = load i32, i32* %x5
+	%x8 = icmp eq i32 %x7, 0
+	%x9 = zext i1 %x8 to i32
+	%x10 = icmp ne i32 %x9, 0
+	br i1 %x10, label %x11, label %x12
+
+x11:
+	%x14 = load i32, i32* %x3
+	ret i32 %x14
+	br label %x12
+
+x12:
+	%x15 = load i32, i32* %x5
+	%x16 = load i32, i32* %x3
+	%x17 = load i32, i32* %x5
+	%x18 = srem i32 %x16, %x17
+	%x19 = call i32 @gcd(i32 %x15i32 %x18)
+	ret i32 %x19
+}
 
 define dso_local i32 @main(){
-	%x5 = alloca i32
-	store i32 0, i32* %x5
-	%x6 = alloca i32
-	%x7 = call i32 @getint()
-	store i32 %x7, i32* %x6
-	br label %x8
-
-x8:
-	%x11 = load i32, i32* %x5
-	%x12 = load i32, i32* %x6
-	%x13 = icmp slt i32 %x11, %x12
-	%x14 = zext i1 %x13 to i32
-	%x15 = icmp ne i32 %x14, 0
-	br i1 %x15, label %x9, label %x10
-
-x9:
-	%x17 = getelementptr [32768 x i32], [32768 x i32]* @x2, i32 0, i32 0
-	%x18 = load i32, i32* %x5
-	%x19 = add i32 0, %x18
-	%x20 = getelementptr i32, i32* %x17, i32 %x19
-	%x21 = call i32 @getch()
-	store i32 %x21, i32* %x20
-	%x22 = load i32, i32* %x5
-	%x23 = add i32 %x22, 1
-	store i32 %x23, i32* %x5
-	br label %x8
-
-x10:
-	%x24 = getelementptr [32768 x i32], [32768 x i32]* @x2, i32 0, i32 0
-	%x25 = load i32, i32* %x5
-	%x26 = add i32 0, %x25
-	%x27 = getelementptr i32, i32* %x24, i32 %x26
-	store i32 0, i32* %x27
-	%x28 = alloca i32
-	%x29 = alloca i32
-	store i32 0, i32* %x5
-	br label %x30
-
-x30:
-	%x33 = getelementptr [32768 x i32], [32768 x i32]* @x2, i32 0, i32 0
-	%x34 = load i32, i32* %x5
-	%x35 = add i32 0, %x34
-	%x36 = getelementptr i32, i32* %x33, i32 %x35
-	%x37 = load i32, i32* %x36
-	%x38 = icmp ne i32 %x37, 0
-	br i1 %x38, label %x31, label %x32
-
-x31:
-	%x40 = getelementptr [32768 x i32], [32768 x i32]* @x2, i32 0, i32 0
-	%x41 = load i32, i32* %x5
-	%x42 = add i32 0, %x41
-	%x43 = getelementptr i32, i32* %x40, i32 %x42
-	%x44 = load i32, i32* %x43
-	store i32 %x44, i32* %x28
-	%x45 = load i32, i32* %x28
-	%x46 = icmp eq i32 %x45, 62
-	%x47 = zext i1 %x46 to i32
-	%x48 = icmp ne i32 %x47, 0
-	br i1 %x48, label %x49, label %x51
-
-x49:
-	%x53 = load i32, i32* @x3
-	%x54 = add i32 %x53, 1
-	store i32 %x54, i32* @x3
-	br label %x50
-
-x51:
-	%x55 = load i32, i32* %x28
-	%x56 = icmp eq i32 %x55, 60
-	%x57 = zext i1 %x56 to i32
-	%x58 = icmp ne i32 %x57, 0
-	br i1 %x58, label %x59, label %x61
-
-x59:
-	%x63 = load i32, i32* @x3
-	%x64 = sub i32 %x63, 1
-	store i32 %x64, i32* @x3
-	br label %x60
-
-x61:
-	%x65 = load i32, i32* %x28
-	%x66 = icmp eq i32 %x65, 43
-	%x67 = zext i1 %x66 to i32
-	%x68 = icmp ne i32 %x67, 0
-	br i1 %x68, label %x69, label %x71
-
-x69:
-	%x73 = getelementptr [65536 x i32], [65536 x i32]* @x1, i32 0, i32 0
-	%x74 = load i32, i32* @x3
-	%x75 = add i32 0, %x74
-	%x76 = getelementptr i32, i32* %x73, i32 %x75
-	%x77 = getelementptr [65536 x i32], [65536 x i32]* @x1, i32 0, i32 0
-	%x78 = load i32, i32* @x3
-	%x79 = add i32 0, %x78
-	%x80 = getelementptr i32, i32* %x77, i32 %x79
-	%x81 = load i32, i32* %x80
-	%x82 = add i32 %x81, 1
-	store i32 %x82, i32* %x76
-	br label %x70
-
-x71:
-	%x83 = load i32, i32* %x28
-	%x84 = icmp eq i32 %x83, 45
-	%x85 = zext i1 %x84 to i32
-	%x86 = icmp ne i32 %x85, 0
-	br i1 %x86, label %x87, label %x89
-
-x87:
-	%x91 = getelementptr [65536 x i32], [65536 x i32]* @x1, i32 0, i32 0
-	%x92 = load i32, i32* @x3
-	%x93 = add i32 0, %x92
-	%x94 = getelementptr i32, i32* %x91, i32 %x93
-	%x95 = getelementptr [65536 x i32], [65536 x i32]* @x1, i32 0, i32 0
-	%x96 = load i32, i32* @x3
-	%x97 = add i32 0, %x96
-	%x98 = getelementptr i32, i32* %x95, i32 %x97
-	%x99 = load i32, i32* %x98
-	%x100 = sub i32 %x99, 1
-	store i32 %x100, i32* %x94
-	br label %x88
-
-x89:
-	%x101 = load i32, i32* %x28
-	%x102 = icmp eq i32 %x101, 46
-	%x103 = zext i1 %x102 to i32
-	%x104 = icmp ne i32 %x103, 0
-	br i1 %x104, label %x105, label %x107
-
-x105:
-	%x109 = getelementptr [65536 x i32], [65536 x i32]* @x1, i32 0, i32 0
-	%x110 = load i32, i32* @x3
-	%x111 = add i32 0, %x110
-	%x112 = getelementptr i32, i32* %x109, i32 %x111
-	%x113 = load i32, i32* %x112
-	call void @putch(i32 %x113)
-	br label %x106
-
-x107:
-	%x114 = load i32, i32* %x28
-	%x115 = icmp eq i32 %x114, 44
-	%x116 = zext i1 %x115 to i32
-	%x117 = icmp ne i32 %x116, 0
-	br i1 %x117, label %x118, label %x120
-
-x118:
-	%x122 = getelementptr [65536 x i32], [65536 x i32]* @x1, i32 0, i32 0
-	%x123 = load i32, i32* @x3
-	%x124 = add i32 0, %x123
-	%x125 = getelementptr i32, i32* %x122, i32 %x124
-	%x126 = call i32 @getch()
-	store i32 %x126, i32* %x125
-	br label %x119
-
-x120:
-	%x127 = load i32, i32* %x28
-	%x128 = icmp eq i32 %x127, 93
-	%x129 = zext i1 %x128 to i32
-	%x130 = getelementptr [65536 x i32], [65536 x i32]* @x1, i32 0, i32 0
-	%x131 = load i32, i32* @x3
-	%x132 = add i32 0, %x131
-	%x133 = getelementptr i32, i32* %x130, i32 %x132
-	%x134 = load i32, i32* %x133
-	%x135 = and i32 %x129, %x134
-	%x136 = icmp ne i32 %x135, 0
-	br i1 %x136, label %x137, label %x138
-
-x137:
-	store i32 1, i32* %x29
-	br label %x140
-
-x140:
-	%x143 = load i32, i32* %x29
-	%x144 = icmp sgt i32 %x143, 0
-	%x145 = zext i1 %x144 to i32
-	%x146 = icmp ne i32 %x145, 0
-	br i1 %x146, label %x141, label %x142
-
-x141:
-	%x148 = load i32, i32* %x5
-	%x149 = sub i32 %x148, 1
-	store i32 %x149, i32* %x5
-	%x150 = getelementptr [32768 x i32], [32768 x i32]* @x2, i32 0, i32 0
-	%x151 = load i32, i32* %x5
-	%x152 = add i32 0, %x151
-	%x153 = getelementptr i32, i32* %x150, i32 %x152
-	%x154 = load i32, i32* %x153
-	store i32 %x154, i32* %x28
-	%x155 = load i32, i32* %x28
-	%x156 = icmp eq i32 %x155, 91
-	%x157 = zext i1 %x156 to i32
-	%x158 = icmp ne i32 %x157, 0
-	br i1 %x158, label %x159, label %x161
-
-x159:
-	%x163 = load i32, i32* %x29
-	%x164 = sub i32 %x163, 1
-	store i32 %x164, i32* %x29
-	br label %x160
-
-x161:
-	%x165 = load i32, i32* %x28
-	%x166 = icmp eq i32 %x165, 93
-	%x167 = zext i1 %x166 to i32
-	%x168 = icmp ne i32 %x167, 0
-	br i1 %x168, label %x169, label %x170
-
-x169:
-	%x172 = load i32, i32* %x29
-	%x173 = add i32 %x172, 1
-	store i32 %x173, i32* %x29
-	br label %x170
-
-x170:
-	br label %x160
-
-x160:
-	br label %x140
-
-x142:
-	br label %x138
-
-x138:
-	br label %x119
-
-x119:
-	br label %x106
-
-x106:
-	br label %x88
-
-x88:
-	br label %x70
-
-x70:
-	br label %x60
-
-x60:
-	br label %x50
-
-x50:
-	%x174 = load i32, i32* %x5
-	%x175 = add i32 %x174, 1
-	store i32 %x175, i32* %x5
-	br label %x30
-
-x32:
+	%x22 = alloca i32
+	store i32 100, i32* %x22
+	%x23 = alloca i32
+	store i32 48, i32* %x23
+	%x24 = load i32, i32* %x22
+	%x25 = load i32, i32* %x23
+	%x26 = call i32 @gcd(i32 %x24i32 %x25)
+	call void @putint(i32 %x26)
 	ret i32 0
 }
+

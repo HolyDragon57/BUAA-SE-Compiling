@@ -50,7 +50,9 @@ public class UnaryExp {
             //But library function is special
             Func func = Func.getLibFunc(this.ident);
             if(func == null){
-                Bios.exit("No such lib function!");
+                func = Bios.getCurrentBlockMarkList().getFunc(this.ident);
+                if(func == null)
+                    Bios.exit("Func not defined");
             }
             if(func.getParamNum() > 0) {
                 if(this.funcRParams == null){
@@ -63,13 +65,19 @@ public class UnaryExp {
 //                if(func.getArguments().get(0).getArray())
 //                    paramDecl.append("i32* ").append(func.getArguments().get(0).getType());
 //                else
+                if(!func.getArguments().get(0).getArray())
                     paramDecl.append("i32 ").append(func.getArguments().get(0).getType());
+                else
+                    paramDecl.append("i32* ").append(func.getArguments().get(0).getType());
             }
             for(int i = 1; i < func.getParamNum(); i ++){
 //                if(func.getArguments().get(i).getArray())
 //                    paramDecl.append(", i32* ").append(func.getArguments().get(i).getType());
 //                else
-                    paramDecl.append(", i32 ").append(func.getArguments().get(i).getType());
+                if(!func.getArguments().get(0).getArray())
+                    paramDecl.append("i32 ").append(func.getArguments().get(i).getType());
+                else
+                    paramDecl.append("i32* ").append(func.getArguments().get(i).getType());
             }
             if(func.getReturnType().equals("void"))
                 Bios.fileWriter.write("\tcall "+func.getReturnType()+" @"+func.getName()+"("+paramDecl+")\n");

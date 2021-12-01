@@ -18,6 +18,7 @@ public class Main {
         CompUnit compUnit = Parser.analyse(tokens);
         //System.out.println("Parser function well!");
         //语义分析和IR生成
+        BlockMarkList.createBlockMarkList(); //The global variable marklist
         Bios.fileWriter = fileWriter;
         compUnit.scan();
 

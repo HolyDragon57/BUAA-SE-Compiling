@@ -9,7 +9,8 @@ public class CompUnit {
     protected void accept(ArrayList<Token> tokens){
         while(Bios.index < tokens.size()) {
             if (tokens.get(Bios.index).getValue().equals("const") || (tokens.get(Bios.index).getValue().equals("int")
-                    && (tokens.get(Bios.index + 2).getValue().equals("[") || tokens.get(Bios.index + 2).getValue().equals("=")))) {
+                    && (tokens.get(Bios.index + 2).getValue().equals("[") || tokens.get(Bios.index + 2).getValue().equals("=") ||
+                    tokens.get(Bios.index + 2).getValue().equals(";")))) {
                 Decl decl2 = new Decl();
                 decl2.accept(tokens);
                 this.decls.add(decl2);

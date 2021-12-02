@@ -24,6 +24,7 @@ public class EqExp {
         }
         if(!token1.isIsi1()){
             String register = Bios.getRegister();
+            token1.setType(token1.getType() == null ? token1.getValue() : token1.getType());
             Bios.fileWriter.write("\t"+register+" = icmp ne i32 "+token1.getType()+", 0\n");
             token1.setType(register);
             token1.setIsi1(true);

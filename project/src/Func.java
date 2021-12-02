@@ -49,8 +49,10 @@ public class Func {
     }
 
     public static Boolean isLibFunc(Ident ident){
-        if(ident.getName().equals("getint") || ident.getName().equals("getch") || ident.getName().equals("putint") || ident.getName().equals("putch") || ident.getName().equals("memset"))
-            return true;
+        if(ident.getName().equals("getint") || ident.getName().equals("getch") || ident.getName().equals("putint")
+                || ident.getName().equals("putch") || ident.getName().equals("memset") || ident.getName().equals("getarray")
+                || ident.getName().equals("putarray"))
+           return true;
         return false;
     }
 
@@ -90,6 +92,20 @@ public class Func {
                 if(!Bios.isDeclared(func))
                     Bios.declareFuncs.add(func);
                 break;
+            case "getarray":
+                func.setName("getarray");
+                func.setReturnType("int");
+                func.setParamNum(1);
+                if(!Bios.isDeclared(func))
+                    Bios.declareFuncs.add(func);
+                break;
+            case "putarray":
+                func.setName("putarray");
+                func.setReturnType("void");
+                func.setParamNum(2);
+                if(!Bios.isDeclared(func))
+                    Bios.declareFuncs.add(func);
+                break;
         }
     }
 
@@ -99,8 +115,8 @@ public class Func {
                 return func;
             }
         }
-        Bios.exit("The library function is not defined");
-        return null;
+        //Bios.exit("The library function is not defined");
+        return Bios.getCurrentBlockMarkList().getFunc(ident);
     }
 
 }

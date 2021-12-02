@@ -79,20 +79,20 @@ public class VarDef {
             Bios.arrayType(array, array.getDims());
             Bios.fileWriter.write("\n");
 
-            array.setRegister(array.getAddressRegister());
-            for(int i = 0; i < array.getDims(); i ++){
-                String register = Bios.getRegister();
-                Bios.fileWriter.write("\t"+register+" = getelementptr ");
-                Bios.arrayType(array, array.getDims()-i);
-                Bios.fileWriter.write(", ");
-                Bios.arrayType(array, array.getDims()-i);
-                Bios.fileWriter.write("* "+array.getRegister()+", i32 0, i32 0\n");
-                array.setRegister(register);
-            }
-            Bios.fileWriter.write("\tcall void @memset(i32* "+array.getRegister()+", i32 0, i32 "+(array.getTotal()*4)+")\n");
-
-            if(this.initVal != null)
+            if(this.initVal != null) {
+                array.setRegister(array.getAddressRegister());
+                for (int i = 0; i < array.getDims(); i++) {
+                    String register = Bios.getRegister();
+                    Bios.fileWriter.write("\t" + register + " = getelementptr ");
+                    Bios.arrayType(array, array.getDims() - i);
+                    Bios.fileWriter.write(", ");
+                    Bios.arrayType(array, array.getDims() - i);
+                    Bios.fileWriter.write("* " + array.getRegister() + ", i32 0, i32 0\n");
+                    array.setRegister(register);
+                }
+                Bios.fileWriter.write("\tcall void @memset(i32* " + array.getRegister() + ", i32 0, i32 " + (array.getTotal() * 4) + ")\n");
                 this.initVal.scanArray(array, 1, 0);
+            }
 
             Bios.getCurrentBlockMarkList().insertArray(array);
         }

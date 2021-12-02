@@ -2,29 +2,40 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class CompUnit {
-    private Funcdef funcdef;
+    private ArrayList<Funcdef> funcdefs = new ArrayList<>();
     private ArrayList<Decl> decls = new ArrayList<>();
+    private ArrayList<String> types = new ArrayList<>();
 
     protected void accept(ArrayList<Token> tokens){
-        BlockMarkList.createBlockMarkList(); //The global variable marklist
-        while(tokens.get(Bios.index).getValue().equals("const") || (tokens.get(Bios.index).getValue().equals("int") && !tokens.get(Bios.index+1).getValue().equals("main"))){
-            Decl decl = new Decl();
-            decl.accept(tokens);
-            this.decls.add(decl);
+        while(Bios.index < tokens.size()) {
+            if (tokens.get(Bios.index).getValue().equals("const") || (tokens.get(Bios.index).getValue().equals("int")
+                    && (tokens.get(Bios.index + 2).getValue().equals("[") || tokens.get(Bios.index + 2).getValue().equals("=")))) {
+                Decl decl2 = new Decl();
+                decl2.accept(tokens);
+                this.decls.add(decl2);
+                String s = "decl";
+                this.types.add(s);
+            } else {
+                Funcdef funcdef2 = new Funcdef();
+                funcdef2.accept(tokens);
+                this.funcdefs.add(funcdef2);
+                String s = "funcdef";
+                this.types.add(s);
+            }
         }
-        Funcdef funcdef2 = new Funcdef();
-        funcdef2.accept(tokens);
-        this.funcdef = funcdef2;
     }
 
     protected void scan() throws IOException {
         Bios.declareFunctions();
-        if(this.decls.size() != 0){
-            for(Decl decl: this.decls){
-                decl.scanGlobal();
+        int i = 0;
+        int j = 0;
+        for(String s: this.types) {
+            if (s.equals("decl"))
+                this.decls.get(i++).scanGlobal();
+            else {
+                this.funcdefs.get(j++).scan();
+                Bios.fileWriter.write("\n");
             }
         }
-        Bios.fileWriter.write("\n");
-        this.funcdef.scan();
     }
 }

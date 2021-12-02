@@ -3,6 +3,15 @@ public class Token {
     private String value;
     private boolean isArray;
     private boolean isi1;
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public boolean isIsi1() {
         return isi1;

@@ -51,12 +51,24 @@ public class Bios {
         String register;
         switch (ope){
             case "+":
+                if(token2.isIsi1()){
+                    String register2 = Bios.getRegister();
+                    fileWriter.write("\t"+register2+" = zext i1 "+token2.getType()+" to i32\n");
+                    token2.setType(register2);
+                }
                 token.setValue((Integer.parseInt(token1.getValue())+Integer.parseInt(token2.getValue()))+"");
                 fileWriter.write("\t"+token.getType()+" = add i32 "+token1.getType()+", "+token2.getType()+"\n");
+                token.setIsi1(false);
                 break;
             case "-":
+                if(token2.isIsi1()){
+                    String register2 = Bios.getRegister();
+                    fileWriter.write("\t"+register2+" = zext i1 "+token2.getType()+" to i32\n");
+                    token2.setType(register2);
+                }
                 token.setValue((Integer.parseInt(token1.getValue())-Integer.parseInt(token2.getValue()))+"");
                 fileWriter.write("\t"+token.getType()+" = sub i32 "+token1.getType()+", "+token2.getType()+"\n");
+                token.setIsi1(false);
                 break;
             case "*":
                 token.setValue((Integer.parseInt(token1.getValue())*Integer.parseInt(token2.getValue()))+"");
@@ -73,51 +85,63 @@ public class Bios {
             case ">":
                 token.setValue(((Integer.parseInt(token1.getValue())) > (Integer.parseInt(token2.getValue())) ? 1 : 0) + "");
                 fileWriter.write("\t"+token.getType()+" = icmp sgt i32 "+token1.getType()+", "+token2.getType()+"\n");
-                register = Bios.getRegister();
-                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
-                token.setType(register);
+//                register = Bios.getRegister();
+//                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
+//                token.setType(register);
+                token.setIsi1(true);
                 break;
             case "<":
                 token.setValue(((Integer.parseInt(token1.getValue())) < (Integer.parseInt(token2.getValue())) ? 1 : 0) + "");
                 fileWriter.write("\t"+token.getType()+" = icmp slt i32 "+token1.getType()+", "+token2.getType()+"\n");
-                register = Bios.getRegister();
-                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
-                token.setType(register);
+//                register = Bios.getRegister();
+//                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
+//                token.setType(register);
+                token.setIsi1(true);
                 break;
             case ">=":
                 token.setValue(((Integer.parseInt(token1.getValue())) >= (Integer.parseInt(token2.getValue())) ? 1 : 0) + "");
                 fileWriter.write("\t"+token.getType()+" = icmp sge i32 "+token1.getType()+", "+token2.getType()+"\n");
-                register = Bios.getRegister();
-                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
-                token.setType(register);
+//                register = Bios.getRegister();
+//                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
+//                token.setType(register);
+                token.setIsi1(true);
                 break;
             case "<=":
                 token.setValue(((Integer.parseInt(token1.getValue())) <= (Integer.parseInt(token2.getValue())) ? 1 : 0) + "");
                 fileWriter.write("\t"+token.getType()+" = icmp sle i32 "+token1.getType()+", "+token2.getType()+"\n");
-                register = Bios.getRegister();
-                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
-                token.setType(register);
+//                register = Bios.getRegister();
+//                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
+//                token.setType(register);
+                token.setIsi1(true);
                 break;
             case "==":
                 token.setValue(((Integer.parseInt(token1.getValue())) == (Integer.parseInt(token2.getValue())) ? 1 : 0) + "");
                 fileWriter.write("\t"+token.getType()+" = icmp eq i32 "+token1.getType()+", "+token2.getType()+"\n");
-                register = Bios.getRegister();
-                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
-                token.setType(register);
+//                register = Bios.getRegister();
+//                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
+//                token.setType(register);
+                token.setIsi1(true);
                 break;
             case "!=":
                 token.setValue(((Integer.parseInt(token1.getValue())) != (Integer.parseInt(token2.getValue())) ? 1 : 0) + "");
                 fileWriter.write("\t"+token.getType()+" = icmp ne i32 "+token1.getType()+", "+token2.getType()+"\n");
-                register = Bios.getRegister();
-                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
-                token.setType(register);
+//                register = Bios.getRegister();
+//                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
+//                token.setType(register);
+                token.setIsi1(true);
                 break;
             case "!":
+                if(token2.isIsi1()){
+                    String register2 = Bios.getRegister();
+                    fileWriter.write("\t"+register2+" = zext i1 "+token2.getType()+" to i32\n");
+                    token2.setType(register2);
+                }
                 token.setValue(((Integer.parseInt(token2.getValue())) == 0 ? 1 : 0) + "");
                 fileWriter.write("\t"+token.getType()+" = icmp eq i32 "+token2.getType()+", 0\n");
-                register = Bios.getRegister();
-                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
-                token.setType(register);
+                token.setIsi1(true);
+//                register = Bios.getRegister();
+//                fileWriter.write("\t"+register+" = zext i1 "+token.getType()+" to i32\n");
+//                token.setType(register);
                 break;
             default:
                 Bios.exit("Basic calculation error!");

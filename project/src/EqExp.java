@@ -22,6 +22,12 @@ public class EqExp {
             Token token2 = this.relExps.get(i).scan();
             token1 = Bios.calculate(token1, token2, opes.get(i-1));
         }
+        if(!token1.isIsi1()){
+            String register = Bios.getRegister();
+            Bios.fileWriter.write("\t"+register+" = icmp ne i32 "+token1.getType()+", 0\n");
+            token1.setType(register);
+            token1.setIsi1(true);
+        }
         return token1;
     }
 }

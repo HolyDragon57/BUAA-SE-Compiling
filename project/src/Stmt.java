@@ -167,15 +167,19 @@ public class Stmt {
 //            intVar.setRegister(register);
         }
         else if(this.cond != null){
-            Token token = this.cond.scan();
-            String register = Bios.getRegister();
-            Bios.fileWriter.write("\t"+register+" = icmp ne i32 "+token.getType()+", 0\n");
-            token.setType(register);
+
+            //String register = Bios.getRegister();
             String area1 = Bios.getNewIrId()+"";
             String area3 = Bios.getNewIrId()+"";
+            String area2;
+            //Token token;
+            //Bios.fileWriter.write("\t"+register+" = icmp ne i32 "+token.getType()+", 0\n");
+            //token.setType(register);
+
             if(this.stmt2 != null){
-                String area2 = Bios.getNewIrId()+"";
-                Bios.fileWriter.write("\tbr i1 "+token.getType()+", label %x"+area1+", label %x"+area2+"\n");
+                area2 = Bios.getNewIrId() + "";
+                this.cond.scan(area1, area2);
+                //Bios.fileWriter.write("\tbr i1 "+token.getType()+", label %x"+area1+", label %x"+area2+"\n");
                 Bios.fileWriter.write("\nx"+area1+":\n");
                 this.stmt1.scan();
                 Bios.fileWriter.write("\tbr label %x"+area3+"\n");
@@ -185,7 +189,8 @@ public class Stmt {
                 Bios.fileWriter.write("\nx"+area3+":\n");
             }
             else{
-                Bios.fileWriter.write("\tbr i1 "+token.getType()+", label %x"+area1+", label %x"+area3+"\n");
+                this.cond.scan(area1, area3);
+                //Bios.fileWriter.write("\tbr i1 "+token.getType()+", label %x"+area1+", label %x"+area3+"\n");
                 Bios.fileWriter.write("\nx"+area1+":\n");
                 this.stmt1.scan();
                 Bios.fileWriter.write("\tbr label %x"+area3+"\n");
@@ -200,14 +205,7 @@ public class Stmt {
             Bios.whiles.add(area3);
             Bios.fileWriter.write("\tbr label %x"+area1+"\n");
             Bios.fileWriter.write("\nx"+area1+":\n");
-            Token token = this.cond2.scan();
-            if(token.getType() == null){
-                token.setType(token.getValue());
-            }
-            String register = Bios.getRegister();
-            Bios.fileWriter.write("\t"+register+" = icmp ne i32 "+token.getType()+", 0\n");
-            token.setType(register);
-            Bios.fileWriter.write("\tbr i1 "+token.getType()+", label %x"+area2+", label %x"+area3+"\n");
+            this.cond2.scan(area2, area3);
             Bios.fileWriter.write("\nx"+area2+":\n");
             this.stmt3.scan();
             Bios.fileWriter.write("\tbr label %x"+area1+"\n");

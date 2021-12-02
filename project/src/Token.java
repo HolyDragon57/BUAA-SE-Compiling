@@ -1,13 +1,22 @@
 public class Token {
     private String type;
     private String value;
-    private Boolean isArray;
+    private boolean isArray;
+    private boolean isi1;
 
-    public Boolean getArray() {
+    public boolean isIsi1() {
+        return isi1;
+    }
+
+    public void setIsi1(boolean isi1) {
+        this.isi1 = isi1;
+    }
+
+    public boolean getArray() {
         return isArray;
     }
 
-    public void setArray(Boolean array) {
+    public void setArray(boolean array) {
         isArray = array;
     }
 //In special situations where being transmitted through the AST.

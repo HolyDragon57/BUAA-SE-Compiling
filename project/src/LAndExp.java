@@ -15,26 +15,17 @@ public class LAndExp {
         }
     }
 
-    protected Token scan() throws IOException {
-        Token token = new Token();
-        if(eqExps.size() == 1){
-            return eqExps.get(0).scan();
+    protected void scan(String area1, String area2) throws IOException {
+        for(int i = 0; i < eqExps.size(); i ++){
+            Token token = eqExps.get(i).scan();
+            if(i + 1 < eqExps.size()) {
+                String area = Bios.getNewIrId() + "";
+                Bios.fileWriter.write("\tbr i1 " + token.getType() + ", label %x" + area + ", label %x" + area2 + "\n");
+                Bios.fileWriter.write("\nx" + area + ":\n");
+            }
+            else {
+                Bios.fileWriter.write("\tbr i1 " + token.getType() + ", label %x" + area1 + ", label %x"+ area2 + "\n");
+            }
         }
-        token = eqExps.get(0).scan();
-        for(int i = 1; i < eqExps.size(); i ++){
-            Token token1 = eqExps.get(i).scan();
-            String register = Bios.getRegister();
-            Bios.fileWriter.write("\t"+register+" = and i32 "+token.getType()+", "+token1.getType()+"\n");
-//            String register2 = Bios.getRegister();
-//            Bios.fileWriter.write("\t"+register2+" = zext i1 "+register+" to i32\n");
-            token.setType(register);
-        }
-//        for(EqExp eqExp: eqExps){
-//            token = eqExp.scan();
-//            if(token.getValue().equals("0")){
-//                return token;
-//            }
-//        }
-        return token;
     }
 }

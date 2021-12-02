@@ -4,37 +4,32 @@ declare void @memset(i32*, i32, i32)
 
 define dso_local i32 @main(){
 	%x2 = alloca i32
-	store i32 5, i32* %x2
-	%x3 = alloca i32
-	store i32 10, i32* %x3
-	%x4 = load i32, i32* %x2
-	%x5 = icmp eq i32 %x4, 5
-	%x6 = zext i1 %x5 to i32
-	%x7 = icmp ne i32 %x6, 0
-	br i1 %x7, label %x8, label %x9
+	store i32 10, i32* %x2
+	%x6 = load i32, i32* %x2
+	%x7 = icmp eq i32 %x6, 0
+	%x9 = zext i1 %x7 to i32
+	%x8 = icmp eq i32 %x9, 0
+	%x11 = zext i1 %x8 to i32
+	%x10 = icmp eq i32 %x11, 0
+	%x13 = zext i1 %x10 to i32
+	%x12 = sub i32 0, %x13
+	%x14 = add i32 0, %x12
+	%x15 = icmp ne i32 %x14, 0
+	br i1 %x15, label %x3, label %x5
 
-x8:
-	%x10 = load i32, i32* %x3
-	%x11 = icmp eq i32 %x10, 10
-	%x12 = zext i1 %x11 to i32
-	%x13 = icmp ne i32 %x12, 0
-	br i1 %x13, label %x14, label %x16
+x3:
+	%x17 = sub i32 0, 1
+	%x18 = sub i32 0, %x17
+	%x19 = sub i32 0, %x18
+	store i32 %x19, i32* %x2
+	br label %x4
 
-x14:
-	store i32 25, i32* %x2
-	br label %x15
+x5:
+	store i32 0, i32* %x2
+	br label %x4
 
-x16:
-	%x17 = load i32, i32* %x2
-	%x18 = add i32 %x17, 15
-	store i32 %x18, i32* %x2
-	br label %x15
-
-x15:
-	br label %x9
-
-x9:
-	%x19 = load i32, i32* %x2
-	call void @putint(i32 %x19)
+x4:
+	%x21 = load i32, i32* %x2
+	call void @putint(i32 %x21)
 	ret i32 0
 }

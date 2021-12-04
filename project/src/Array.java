@@ -114,7 +114,7 @@ public class Array {
         if(this.getDims() == values.size())
             temp.setParamType("i32");
         else
-            temp.setParamType(this.arrayType(this.getDims()-values.size())+"*");
+            temp.setParamType(this.arrayType(this.getDims()-values.size()-1)+"*");
         return temp;
     }
 }

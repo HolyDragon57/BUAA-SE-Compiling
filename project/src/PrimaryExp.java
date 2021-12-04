@@ -54,14 +54,15 @@ public class PrimaryExp {
                     token1.setType(token1.getType() == null ? token1.getValue() : token1.getType());
                     values.add(token1);
                 }
-                if(values.size() != array.getDims())
-                    Bios.exit("Array dims error!");
 
                 Token token2 = array.getArrayElement(values);
 
                 String register = Bios.getRegister();
-                Bios.fileWriter.write("\t" + register + " = load i32, i32* " + token2.getType() + "\n");
-                token.setType(register);
+                if(array.getDims() == values.size()) {
+                    Bios.fileWriter.write("\t" + register + " = load i32, i32* " + token2.getType() + "\n");
+                    token.setType(register);
+                }
+                else token.setType(token2.getType());
                 token.setValue("1");
                 token.setParamType(token2.getParamType());
             }

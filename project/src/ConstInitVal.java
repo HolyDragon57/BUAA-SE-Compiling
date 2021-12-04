@@ -38,15 +38,14 @@ public class ConstInitVal {
         if(i > array.getDims() )
             Bios.exit("Const array declare out of boundary!");
         else if(i < array.getDims() ){
-            int j = 0;
             ++i;
             for(ConstInitVal constInitVal: constInitVals){
                 int index = 1;
                 for(int k = i - 1; k < array.getDims(); k ++)
                     index *= array.getDim().get(k);
-                pos = j * index;
+
                 constInitVal.scanArray(array, i, pos, addr);
-                j ++;
+                pos += index;
             }
         }
         else {
@@ -66,20 +65,21 @@ public class ConstInitVal {
         if (i > array.getDims())
             Bios.exit("Const array declare out of boundary!");
         else if (i < array.getDims()) {
-            int j = 0;
             ++i;
+            int j = 0;
             Bios.fileWriter.write("[");
             for (ConstInitVal constInitVal: constInitVals) {
                 Bios.fileWriter.write(array.arrayType(array.getDims()-(i-1))+" ");
                 int index = 1;
                 for(int k = i - 1; k < array.getDims(); k ++)
                     index *= array.getDim().get(k);
-                pos = j * index;
+
                 constInitVal.scanGlobalArray(array, i, pos);
-                if(j < array.getDim().get(0) - 1){
+                pos += index;
+                if(j < array.getDim().get(i-2) - 1){
                     Bios.fileWriter.write(", ");
                 }
-                j++;
+                j ++;
             }
             if (constInitVals.size() < array.getDim().get(array.getDims() - i)) {
                 for(int k = 0; k < array.getDim().get(array.getDims() - i)-constInitVals.size(); k ++) {

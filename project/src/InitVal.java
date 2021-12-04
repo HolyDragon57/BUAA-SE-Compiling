@@ -48,15 +48,13 @@ public class InitVal {
         if(i > array.getDims() )
             Bios.exit("Const array declare out of boundary!");
         else if(i < array.getDims() ){
-            int j = 0;
             ++i;
             for(InitVal initVal: initVals){
                 int index = 1;
                 for(int k = i - 1; k < array.getDims(); k ++)
                     index *= array.getDim().get(k);
-                pos = j * index;
                 initVal.scanArray(array, i, pos, addr);
-                j ++;
+                pos += index;
             }
         }
         else {
@@ -85,9 +83,10 @@ public class InitVal {
                 int index = 1;
                 for(int k = i - 1; k < array.getDims(); k ++)
                     index *= array.getDim().get(k);
-                pos = j * index;
+
                 initVal.scanGlobalArray(array, i, pos);
-                if(j < array.getDim().get(0) - 1){
+                pos += index;
+                if(j < array.getDim().get(i-2) - 1){
                     Bios.fileWriter.write(", ");
                 }
                 j++;

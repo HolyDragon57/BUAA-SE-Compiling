@@ -1,0 +1,122 @@
+declare void @putint(i32)
+declare void @putch(i32)
+declare void @memset(i32*, i32, i32)
+
+@x1 = dso_local global [3 x [4 x i32]]  zeroinitializer
+define dso_local i32 @main(){
+	%x4 = alloca i32
+	store i32 0, i32* %x4
+	%x5 = alloca i32
+	store i32 0, i32* %x5
+	br label %x6
+
+x6:
+	%x9 = load i32, i32* %x4
+	%x10 = add i32 3, 4
+	%x11 = sub i32 %x10, 2
+	%x12 = icmp sle i32 %x9, %x11
+	br i1 %x12, label %x7, label %x8
+
+x7:
+	%x14 = alloca i32
+	%x15 = load i32, i32* %x4
+	store i32 %x15, i32* %x14
+	br label %x16
+
+x16:
+	%x19 = load i32, i32* %x14
+	%x20 = icmp sge i32 %x19, 0
+	br i1 %x20, label %x17, label %x18
+
+x17:
+	%x24 = load i32, i32* %x14
+	%x25 = icmp slt i32 %x24, 4
+	br i1 %x25, label %x26, label %x23
+
+x26:
+	%x27 = load i32, i32* %x4
+	%x28 = load i32, i32* %x14
+	%x29 = sub i32 %x27, %x28
+	%x30 = icmp slt i32 %x29, 3
+	br i1 %x30, label %x22, label %x23
+
+x22:
+	%x32 = load i32, i32* %x4
+	%x33 = load i32, i32* %x14
+	%x34 = sub i32 %x32, %x33
+	%x35 = load i32, i32* %x14
+	%x36 = getelementptr [3 x [4 x i32]], [3 x [4 x i32]]* @x1, i32 0, i32 0
+	%x37 = add i32 0,%x34
+	%x38 = mul i32 %x37, 4
+	%x39 = getelementptr [4 x i32], [4 x i32]* %x36, i32 0, i32 0
+	%x40 = add i32 %x38,%x35
+	%x41 = mul i32 %x40, 1
+	%x42 = getelementptr i32, i32* %x39, i32 %x41
+	%x43 = load i32, i32* %x5
+	store i32 %x43, i32* %x42
+	%x44 = load i32, i32* %x5
+	%x45 = add i32 %x44, 1
+	store i32 %x45, i32* %x5
+	br label %x23
+
+x23:
+	%x46 = load i32, i32* %x14
+	%x47 = sub i32 %x46, 1
+	store i32 %x47, i32* %x14
+	br label %x16
+
+x18:
+	%x48 = load i32, i32* %x4
+	%x49 = add i32 %x48, 1
+	store i32 %x49, i32* %x4
+	br label %x6
+
+x8:
+	store i32 0, i32* %x4
+	%x50 = alloca i32
+	store i32 0, i32* %x50
+	br label %x51
+
+x51:
+	%x54 = load i32, i32* %x4
+	%x55 = icmp slt i32 %x54, 3
+	br i1 %x55, label %x52, label %x53
+
+x52:
+	store i32 0, i32* %x50
+	br label %x57
+
+x57:
+	%x60 = load i32, i32* %x50
+	%x61 = icmp slt i32 %x60, 4
+	br i1 %x61, label %x58, label %x59
+
+x58:
+	%x63 = load i32, i32* %x4
+	%x64 = load i32, i32* %x50
+	%x65 = getelementptr [3 x [4 x i32]], [3 x [4 x i32]]* @x1, i32 0, i32 0
+	%x66 = add i32 0,%x63
+	%x67 = mul i32 %x66, 4
+	%x68 = getelementptr [4 x i32], [4 x i32]* %x65, i32 0, i32 0
+	%x69 = add i32 %x67,%x64
+	%x70 = mul i32 %x69, 1
+	%x71 = getelementptr i32, i32* %x68, i32 %x70
+	%x72 = load i32, i32* %x71
+	call void @putint(i32 %x72)
+	call void @putch(i32 32)
+	%x73 = load i32, i32* %x50
+	%x74 = add i32 %x73, 1
+	store i32 %x74, i32* %x50
+	br label %x57
+
+x59:
+	call void @putch(i32 10)
+	%x75 = load i32, i32* %x4
+	%x76 = add i32 %x75, 1
+	store i32 %x76, i32* %x4
+	br label %x51
+
+x53:
+	ret i32 0
+}
+

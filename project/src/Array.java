@@ -111,7 +111,10 @@ public class Array {
         }
         if(values.size() == 0)
             temp.setType(initAddr);
-        temp.setParamType(this.arrayType(this.getDims()-values.size())+"*");
+        if(this.getDims() == values.size())
+            temp.setParamType("i32");
+        else
+            temp.setParamType(this.arrayType(this.getDims()-values.size())+"*");
         return temp;
     }
 }

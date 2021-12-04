@@ -2,8 +2,8 @@ import java.util.ArrayList;
 
 public class FuncFParam {
     private Ident ident;
-    private Exp exp;
-    private boolean oneDim;
+    private ArrayList<Exp> exps = new ArrayList<>();
+    private int dim;
 
     protected void accept(ArrayList<Token> tokens){
         if(!tokens.get(Bios.index).getValue().equals("int")){
@@ -21,23 +21,25 @@ public class FuncFParam {
             if(!tokens.get(Bios.index).getValue().equals("]"))
                 Bios.exit("FuncFParam ident [] error");
             Bios.addIndex();
-            this.oneDim = true;
-            if(tokens.get(Bios.index).getValue().equals("[")){
+            int i = 1;
+            while(tokens.get(Bios.index).getValue().equals("[")){
                 Bios.addIndex();
                 Exp exp2 = new Exp();
                 exp2.accept(tokens);
-                this.exp = exp2;
+                this.exps.add(exp2);
                 if(!tokens.get(Bios.index).getValue().equals("]")){
                     Bios.exit("FuncFParam [] error!");
                 }
                 Bios.addIndex();
+                i ++;
             }
+            this.dim = i;
         }
     }
 
     protected Token scan(){
         Token token = new Token();
-        if(!this.oneDim){
+        if(this.dim == 0){
             IntVar intVar = new IntVar();
             intVar.setName(this.ident.getName());
 
@@ -48,33 +50,20 @@ public class FuncFParam {
             intVar.setAddressRegister(Bios.getRegister());
             Bios.getCurrentBlockMarkList().insertInt(intVar);
         }
-        else if(this.exp == null){
-            Array array = new Array();
-            array.setDims(1);
-            array.setName(ident.getName());
-            array.getDim().add(0);
-
-            token.setType(Bios.getRegister());
-            token.setValue("i32*");
-            token.setArray(true);
-            token.setName(ident.getName());
-
-            array.setAddressRegister(Bios.getRegister());
-            array.setUndefined(true);
-            Bios.getCurrentBlockMarkList().insertArray(array);
-        }
         else{
-            int value = this.exp.getAns();
             Array array = new Array();
-            array.setDims(2);
+            array.setDims(this.dim);
             array.setName(ident.getName());
             array.getDim().add(0);
-            array.getDim().add(value);
-
-            token.setName(ident.getName());
+            if(this.exps.size() > 0){
+                for(Exp exp: exps) {
+                    array.getDim().add(exp.getAns());
+                }
+            }
             token.setType(Bios.getRegister());
-            token.setValue("["+value+" x i32]*");
+            token.setValue(array.arrayType(array.getDims()-1)+"*");
             token.setArray(true);
+            token.setName(ident.getName());
 
             array.setAddressRegister(Bios.getRegister());
             array.setUndefined(true);

@@ -4,8 +4,7 @@ import java.util.ArrayList;
 public class Func {
     private String returnType;
     private String name;
-    private ArrayList<Token> arguments;
-    private int returnValue;
+    private ArrayList<Token> arguments = new ArrayList<>();
     private int paramNum;
 
     public int getParamNum() {
@@ -40,14 +39,6 @@ public class Func {
         this.arguments = arguments;
     }
 
-    public int getReturnValue() {
-        return returnValue;
-    }
-
-    public void setReturnValue(int returnValue) {
-        this.returnValue = returnValue;
-    }
-
     public static Boolean isLibFunc(Ident ident){
         if(ident.getName().equals("getint") || ident.getName().equals("getch") || ident.getName().equals("putint")
                 || ident.getName().equals("putch") || ident.getName().equals("memset") || ident.getName().equals("getarray")
@@ -75,6 +66,9 @@ public class Func {
                 func.setName("putint");
                 func.setReturnType("void");
                 func.setParamNum(1);
+                Token token = new Token();
+                token.setValue("i32");
+                func.getArguments().add(token);
                 if(!Bios.isDeclared(func))
                     Bios.declareFuncs.add(func);
                 break;
@@ -82,6 +76,9 @@ public class Func {
                 func.setName("putch");
                 func.setReturnType("void");
                 func.setParamNum(1);
+                Token token2 = new Token();
+                token2.setValue("i32");
+                func.getArguments().add(token2);
                 if(!Bios.isDeclared(func))
                     Bios.declareFuncs.add(func);
                 break;
@@ -96,6 +93,9 @@ public class Func {
                 func.setName("getarray");
                 func.setReturnType("int");
                 func.setParamNum(1);
+                Token token3 = new Token();
+                token3.setValue("i32*");
+                func.getArguments().add(token3);
                 if(!Bios.isDeclared(func))
                     Bios.declareFuncs.add(func);
                 break;
@@ -103,6 +103,12 @@ public class Func {
                 func.setName("putarray");
                 func.setReturnType("void");
                 func.setParamNum(2);
+                Token token4 = new Token();
+                token4.setValue("i32");
+                Token token5 = new Token();
+                token5.setValue("i32*");
+                func.getArguments().add(token4);
+                func.getArguments().add(token5);
                 if(!Bios.isDeclared(func))
                     Bios.declareFuncs.add(func);
                 break;

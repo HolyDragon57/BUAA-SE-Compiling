@@ -2,6 +2,7 @@ import java.util.ArrayList;
 
 public class LVal {
     private Ident ident;
+    private ArrayList<Exp> exps = new ArrayList<>();
 
     public Ident getIdent() {
         return ident;
@@ -19,7 +20,6 @@ public class LVal {
         this.exps = exps;
     }
 
-    private ArrayList<Exp> exps = new ArrayList<>();
     protected void accept(ArrayList<Token> tokens){
         Ident ident2 = new Ident();
         ident2.accept(tokens);

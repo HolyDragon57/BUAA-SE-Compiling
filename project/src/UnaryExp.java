@@ -46,42 +46,32 @@ public class UnaryExp {
             return this.primaryExp.scan();
         }
         else if(this.ident != null){
-            //Honestly speaking, this process is going to check the marklist
-            //But library function is special
             Func func = Func.getLibFunc(this.ident);
             if(func == null){
                 func = Bios.getCurrentBlockMarkList().getFunc(this.ident);
                 if(func == null)
                     Bios.exit("Func not defined");
             }
+            StringBuilder paramDecl = new StringBuilder();
             if(func.getParamNum() > 0) {
                 if(this.funcRParams == null){
-                    Bios.exit("Function params error!");
+                    Bios.exit("Function params' number error!");
                 }
-                func.setArguments(this.funcRParams.scan());
+                ArrayList<Token> tokens = this.funcRParams.scan();
+                if(tokens.size() != func.getParamNum())
+                    Bios.exit("Function params' number error!");
+                //Check params' type
+                for(int i = 0; i < tokens.size(); i ++){
+                    if(!tokens.get(i).getParamType().equals(func.getArguments().get(i).getValue()))
+                        Bios.exit("Function params' type error!");
+                    paramDecl.append(tokens.get(i).getParamType()+" "+tokens.get(i).getType());
+                    if(i < tokens.size() - 1)
+                        paramDecl.append(", ");
+                }
             }
-            StringBuilder paramDecl = new StringBuilder();
-            if(func.getParamNum() != 0){
-//                if(func.getArguments().get(0).getArray())
-//                    paramDecl.append("i32* ").append(func.getArguments().get(0).getType());
-//                else
-                if(!func.getArguments().get(0).getArray())
-                    paramDecl.append("i32 ").append(func.getArguments().get(0).getType());
-                else
-                    paramDecl.append("i32* ").append(func.getArguments().get(0).getType());
-            }
-            for(int i = 1; i < func.getParamNum(); i ++){
-//                if(func.getArguments().get(i).getArray())
-//                    paramDecl.append(", i32* ").append(func.getArguments().get(i).getType());
-//                else
-                if(!func.getArguments().get(0).getArray())
-                    paramDecl.append("i32 ").append(func.getArguments().get(i).getType());
-                else
-                    paramDecl.append("i32* ").append(func.getArguments().get(i).getType());
 
-            }
             if(func.getReturnType().equals("void"))
-                Bios.fileWriter.write("\tcall "+func.getReturnType()+" @"+func.getName()+"("+paramDecl+")\n");
+                Bios.fileWriter.write("\tcall void @"+func.getName()+"("+paramDecl+")\n");
             else if(func.getReturnType().equals("int")){
                 token.setType(Bios.getRegister());
                 Bios.fileWriter.write("\t"+token.getType() + " = call i32 @"+func.getName()+"("+paramDecl+")\n");

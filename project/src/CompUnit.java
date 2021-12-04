@@ -27,6 +27,9 @@ public class CompUnit {
     }
 
     protected void scan() throws IOException {
+        if(!Bios.hasMain){
+            Bios.exit("No Main function!");
+        }
         Bios.declareFunctions();
         int i = 0;
         int j = 0;

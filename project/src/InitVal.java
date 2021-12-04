@@ -20,22 +20,23 @@ public class InitVal {
             this.exp = exp2;
         }
         else{
-            if(tokens.get(Bios.index).getValue().equals("{")) {
-                Bios.addIndex();
-                if(!tokens.get(Bios.index).getValue().equals("}")) {
-                    InitVal initVal = new InitVal();
-                    initVal.accept(tokens);
-                    this.initVals.add(initVal);
-                    while (tokens.get(Bios.index).getValue().equals(",")) {
-                        Bios.addIndex();
-                        InitVal initVal2 = new InitVal();
-                        initVal2.accept(tokens);
-                        this.initVals.add(initVal2);
-                    }
+            Bios.addIndex();
+            if(!tokens.get(Bios.index).getValue().equals("}")) {
+                InitVal initVal = new InitVal();
+                initVal.accept(tokens);
+                this.initVals.add(initVal);
+                while (tokens.get(Bios.index).getValue().equals(",")) {
+                    Bios.addIndex();
+                    InitVal initVal2 = new InitVal();
+                    initVal2.accept(tokens);
+                    this.initVals.add(initVal2);
                 }
-                Bios.addIndex();
+                if(!tokens.get(Bios.index).getValue().equals("}"))
+                    Bios.exit("InitVal {} error!");
             }
+            Bios.addIndex();
         }
+
 
     }
 
@@ -43,15 +44,18 @@ public class InitVal {
         return this.exp.scan();
     }
 
-    protected void scanArray(Array array, int i, int pos) throws IOException{
+    protected void scanArray(Array array, int i, int pos, String addr) throws IOException{
         if(i > array.getDims() )
             Bios.exit("Const array declare out of boundary!");
         else if(i < array.getDims() ){
             int j = 0;
             ++i;
             for(InitVal initVal: initVals){
-                pos = j * array.getDim().get(i-1);
-                initVal.scanArray(array, i, pos);
+                int index = 1;
+                for(int k = i - 1; k < array.getDims(); k ++)
+                    index *= array.getDim().get(k);
+                pos = j * index;
+                initVal.scanArray(array, i, pos, addr);
                 j ++;
             }
         }
@@ -59,12 +63,10 @@ public class InitVal {
             for(InitVal initVal: initVals){
                 if (initVal.exp != null) {
                     Token token = initVal.exp.scan();
-                    array.getArrayElems().get(pos).setValue(Integer.parseInt(token.getValue()));
                     token.setType(token.getType() == null ? token.getValue() : token.getType());
                     String register = Bios.getRegister();
-                    Bios.fileWriter.write("\t"+register+" = getelementptr i32, i32* "+array.getRegister()+", i32 "+pos+"\n");
+                    Bios.fileWriter.write("\t"+register+" = getelementptr i32, i32* "+addr+", i32 "+pos+"\n");
                     Bios.fileWriter.write("\tstore i32 "+token.getType()+", i32* "+register+"\n");
-                    array.getArrayElems().get(pos).setRegister(register);
                     pos ++;
                 }
             }
@@ -79,9 +81,11 @@ public class InitVal {
             ++i;
             Bios.fileWriter.write("[");
             for (InitVal initVal : initVals) {
-                Bios.arrayType(array, i-1);
-                Bios.fileWriter.write(" ");
-                pos = j * array.getDim().get(i - 1);//problems here
+                Bios.fileWriter.write(array.arrayType(array.getDims()-(i-1))+" ");
+                int index = 1;
+                for(int k = i - 1; k < array.getDims(); k ++)
+                    index *= array.getDim().get(k);
+                pos = j * index;
                 initVal.scanGlobalArray(array, i, pos);
                 if(j < array.getDim().get(0) - 1){
                     Bios.fileWriter.write(", ");
@@ -90,8 +94,7 @@ public class InitVal {
             }
             if (initVals.size() < array.getDim().get(array.getDims() - i)) {
                 for(int k = 0; k < array.getDim().get(array.getDims() - i)-initVals.size(); k ++) {
-                    Bios.arrayType(array, i-1);
-                    Bios.fileWriter.write(" zeroinitializer");
+                    Bios.fileWriter.write(array.arrayType(array.getDims()-(i-1))+" zeroinitializer");
                 }
                 Bios.fileWriter.write("]");
                 return;
@@ -103,18 +106,15 @@ public class InitVal {
             for (InitVal initVal : initVals) {
                 if (initVal.exp != null) {
                     int value = initVal.exp.getAns();
-                    array.getArrayElems().get(pos).setValue(value);
-                    Bios.arrayType(array, 0);
-                    Bios.fileWriter.write(" " + value);
+                    Bios.fileWriter.write("i32 " + value);
                     pos++;
                     j ++;
                 }
-                if (j <= array.getDim().get(i-1) - 1)
+                if (j < array.getDim().get(i-1))
                     Bios.fileWriter.write(", ");
             }
             while (j < array.getDim().get(i-1)) {
-                Bios.arrayType(array, 0);
-                Bios.fileWriter.write(" 0");
+                Bios.fileWriter.write("i32 0");
                 if (j < array.getDim().get(i-1) - 1)
                     Bios.fileWriter.write(", ");
                 j++;

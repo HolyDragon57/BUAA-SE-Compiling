@@ -1,9 +1,23 @@
 public class Token {
     private String type;
     private String value;
+
     private boolean isArray;
     private boolean isi1;
     private String name;
+    private String paramType = "i32";
+
+    public boolean isArray() {
+        return isArray;
+    }
+
+    public String getParamType() {
+        return paramType;
+    }
+
+    public void setParamType(String paramType) {
+        this.paramType = paramType;
+    }
 
     public String getName() {
         return name;

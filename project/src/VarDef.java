@@ -45,9 +45,6 @@ public class VarDef {
                     Bios.fileWriter.write("\tstore i32 " + intVar.getValue() + ", i32* " + intVar.getAddressRegister() + "\n");
                 else
                     Bios.fileWriter.write("\tstore i32 " + intVar.getValueRegister() + ", i32* " + intVar.getAddressRegister() + "\n");
-//            String register = Bios.getRegister();
-//            Bios.fileWriter.write("\t"+ register + " = load i32, i32* "+ intVar.getAddressRegister()+"\n");
-//            intVar.setRegister(register);
             }
             Bios.getCurrentBlockMarkList().insertInt(intVar);
         }
@@ -55,11 +52,13 @@ public class VarDef {
             Array array = new Array();
             array.setName(this.ident.getName());
             array.setAddressRegister(Bios.getRegister());
+
             Ident ident = new Ident();
             ident.setType("array");
             ident.setName(array.getName());
             if (Bios.getCurrentBlockMarkList().isRecorded(ident))
                 Bios.exit("The array has already been declared!");
+
             array.setDims(this.constExps.size());
             for(ConstExp constExp: constExps){
                 array.getDim().add(constExp.scan());
@@ -68,30 +67,13 @@ public class VarDef {
             int total = 1;
             for(int i = 0; i < array.getDims(); i ++)
                 total *= array.getDim().get(i);
-            array.setTotal(total);
-            for(int i = 0; i < total; i ++){
-                ArrayElem arrayElem = new ArrayElem();
-                arrayElem.setValue(0);
-                array.getArrayElems().add(arrayElem);
-            }
 
-            Bios.fileWriter.write("\t"+array.getAddressRegister()+" = alloca ");
-            Bios.arrayType(array, array.getDims());
-            Bios.fileWriter.write("\n");
+            Bios.fileWriter.write("\t"+array.getAddressRegister()+" = alloca "+array.arrayType(array.getDims())+"\n");
 
             if(this.initVal != null) {
-                array.setRegister(array.getAddressRegister());
-                for (int i = 0; i < array.getDims(); i++) {
-                    String register = Bios.getRegister();
-                    Bios.fileWriter.write("\t" + register + " = getelementptr ");
-                    Bios.arrayType(array, array.getDims() - i);
-                    Bios.fileWriter.write(", ");
-                    Bios.arrayType(array, array.getDims() - i);
-                    Bios.fileWriter.write("* " + array.getRegister() + ", i32 0, i32 0\n");
-                    array.setRegister(register);
-                }
-                Bios.fileWriter.write("\tcall void @memset(i32* " + array.getRegister() + ", i32 0, i32 " + (array.getTotal() * 4) + ")\n");
-                this.initVal.scanArray(array, 1, 0);
+                Token token = array.getStartAddress();
+                Bios.fileWriter.write("\tcall void @memset(i32* " + token.getType() + ", i32 0, i32 " + (total * 4) + ")\n");
+                this.initVal.scanArray(array, 1, 0, token.getType());
             }
 
             Bios.getCurrentBlockMarkList().insertArray(array);
@@ -117,6 +99,7 @@ public class VarDef {
             Array array = new Array();
             array.setName(this.ident.getName());
             array.setAddressRegister("@x"+Bios.getNewIrId());
+
             Ident ident = new Ident();
             ident.setType("array");
             ident.setName(array.getName());
@@ -130,18 +113,10 @@ public class VarDef {
             int total = 1;
             for(int i = 0; i < array.getDims(); i ++)
                 total *= array.getDim().get(i);
-            array.setTotal(total);
-            for(int i = 0; i < total; i ++){
-                ArrayElem arrayElem = new ArrayElem();
-                arrayElem.setValue(0);
-                array.getArrayElems().add(arrayElem);
-            }
 
-            Bios.fileWriter.write(array.getAddressRegister()+" = dso_local global ");
-            Bios.arrayType(array, array.getDims());
+            Bios.fileWriter.write(array.getAddressRegister()+" = dso_local global "+array.arrayType(array.getDims())+" ");
 
             if(this.initVal != null && this.initVal.getInitVals().size() != 0) {
-                Bios.fileWriter.write(" ");
                 this.initVal.scanGlobalArray(array, 1, 0);
                 Bios.fileWriter.write("\n");
             }

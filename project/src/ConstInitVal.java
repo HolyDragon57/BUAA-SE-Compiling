@@ -11,37 +11,41 @@ public class ConstInitVal {
             this.constExp = constExp2;
         }
         else{
-            if(tokens.get(Bios.index).getValue().equals("{")) {
-                Bios.addIndex();
-                if(!tokens.get(Bios.index).getValue().equals("}")) {
-                    ConstInitVal constInitVal = new ConstInitVal();
-                    constInitVal.accept(tokens);
-                    this.constInitVals.add(constInitVal);
-                    while (tokens.get(Bios.index).getValue().equals(",")) {
-                        Bios.addIndex();
-                        ConstInitVal constInitVal2 = new ConstInitVal();
-                        constInitVal2.accept(tokens);
-                        this.constInitVals.add(constInitVal2);
-                    }
+            Bios.addIndex();
+            if(!tokens.get(Bios.index).getValue().equals("}")) {
+                ConstInitVal constInitVal = new ConstInitVal();
+                constInitVal.accept(tokens);
+                this.constInitVals.add(constInitVal);
+                while (tokens.get(Bios.index).getValue().equals(",")) {
+                    Bios.addIndex();
+                    ConstInitVal constInitVal2 = new ConstInitVal();
+                    constInitVal2.accept(tokens);
+                    this.constInitVals.add(constInitVal2);
                 }
-                Bios.addIndex();
+                if(!tokens.get(Bios.index).getValue().equals("}"))
+                    Bios.exit("ConstInitVal {} error!");
             }
+            Bios.addIndex();
         }
+
     }
 
     protected int scan() throws IOException {
         return this.constExp.scan();
     }
 
-    protected void scanArray(Array array, int i, int pos) throws IOException{
+    protected void scanArray(Array array, int i, int pos, String addr) throws IOException{
         if(i > array.getDims() )
             Bios.exit("Const array declare out of boundary!");
         else if(i < array.getDims() ){
             int j = 0;
             ++i;
             for(ConstInitVal constInitVal: constInitVals){
-                pos = j * array.getDim().get(i-1);
-                constInitVal.scanArray(array, i, pos);
+                int index = 1;
+                for(int k = i - 1; k < array.getDims(); k ++)
+                    index *= array.getDim().get(k);
+                pos = j * index;
+                constInitVal.scanArray(array, i, pos, addr);
                 j ++;
             }
         }
@@ -49,11 +53,9 @@ public class ConstInitVal {
             for(ConstInitVal constInitVal: constInitVals){
                 if (constInitVal.constExp != null) {
                     int value = constInitVal.constExp.scan();
-                    array.getArrayElems().get(pos).setValue(value);
                     String register = Bios.getRegister();
-                    Bios.fileWriter.write("\t"+register+" = getelementptr i32, i32* "+array.getRegister()+", i32 "+pos+"\n");
+                    Bios.fileWriter.write("\t"+register+" = getelementptr i32, i32* "+addr+", i32 "+pos+"\n");
                     Bios.fileWriter.write("\tstore i32 "+value+", i32* "+register+"\n");
-                    array.getArrayElems().get(pos).setRegister(register);
                     pos ++;
                 }
             }
@@ -68,9 +70,11 @@ public class ConstInitVal {
             ++i;
             Bios.fileWriter.write("[");
             for (ConstInitVal constInitVal: constInitVals) {
-                Bios.arrayType(array, i-1);
-                Bios.fileWriter.write(" ");
-                pos = j * array.getDim().get(i - 1);//problems here
+                Bios.fileWriter.write(array.arrayType(array.getDims()-(i-1))+" ");
+                int index = 1;
+                for(int k = i - 1; k < array.getDims(); k ++)
+                    index *= array.getDim().get(k);
+                pos = j * index;
                 constInitVal.scanGlobalArray(array, i, pos);
                 if(j < array.getDim().get(0) - 1){
                     Bios.fileWriter.write(", ");
@@ -79,8 +83,7 @@ public class ConstInitVal {
             }
             if (constInitVals.size() < array.getDim().get(array.getDims() - i)) {
                 for(int k = 0; k < array.getDim().get(array.getDims() - i)-constInitVals.size(); k ++) {
-                    Bios.arrayType(array, i-1);
-                    Bios.fileWriter.write(" zeroinitializer");
+                    Bios.fileWriter.write(array.arrayType(array.getDims()-(i-1))+" zeroinitializer");
                 }
                 Bios.fileWriter.write("]");
                 return;
@@ -92,18 +95,16 @@ public class ConstInitVal {
             for (ConstInitVal constInitVal: constInitVals) {
                 if (constInitVal.constExp != null) {
                     int value = constInitVal.scan();
-                    array.getArrayElems().get(pos).setValue(value);
-                    Bios.arrayType(array, 0);
-                    Bios.fileWriter.write(" " + value);
+                    Bios.fileWriter.write("i32 " + value);
                     pos++;
                     j ++;
                 }
-                if (j <= array.getDim().get(i-1) - 1)
+                //j already plus 1
+                if (j < array.getDim().get(i-1))
                     Bios.fileWriter.write(", ");
             }
             while (j < array.getDim().get(i-1)) {
-                Bios.arrayType(array, 0);
-                Bios.fileWriter.write(" 0");
+                Bios.fileWriter.write("i32 0");
                 if (j < array.getDim().get(i-1) - 1)
                     Bios.fileWriter.write(", ");
                 j++;

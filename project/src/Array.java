@@ -84,12 +84,19 @@ public class Array {
                     +this.arrayType(this.getDims()-1)+"* * "+this.getAddressRegister()+"\n");
         for(int i = 0; i < values.size(); i ++){
             String register = Bios.getRegister();
-            Bios.fileWriter.write("\t"+register+" = add i32 "+temp.getType()+","+values.get(i).getType()+"\n");
+            Bios.fileWriter.write("\t"+register+" = add i32 0, "+values.get(i).getType()+"\n");
             int index = 1;
             for(int k = i+1; k < this.getDims(); k ++)
                 index *= this.getDim().get(k);
             String register2 = Bios.getRegister();
             Bios.fileWriter.write("\t"+register2+" = mul i32 "+register+", "+index+"\n");
+
+            if(i > 0){
+                String register5 = Bios.getRegister();
+                Bios.fileWriter.write("\t"+register5+" = add i32 "+temp.getType()+", "+register2+"\n");
+                register2 = register5;
+            }
+
             String register4 = Bios.getRegister();
             if(i + 1 == values.size() && values.size() == this.getDims()){
                 Bios.fileWriter.write("\t"+register4+" = getelementptr "+this.arrayType(this.getDims()-i-1)+", "

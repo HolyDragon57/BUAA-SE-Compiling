@@ -81,9 +81,11 @@ public class ConstInitVal {
                 }
                 j ++;
             }
-            if (constInitVals.size() < array.getDim().get(array.getDims() - i)) {
-                for(int k = 0; k < array.getDim().get(array.getDims() - i)-constInitVals.size(); k ++) {
+            if (constInitVals.size() < array.getDim().get(i-2)) {
+                for(int k = 0; k < array.getDim().get(i-2)-constInitVals.size(); k ++) {
                     Bios.fileWriter.write(array.arrayType(array.getDims()-(i-1))+" zeroinitializer");
+                    if(k < array.getDim().get(i-2)-constInitVals.size() - 1)
+                        Bios.fileWriter.write(", ");
                 }
                 Bios.fileWriter.write("]");
                 return;

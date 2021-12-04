@@ -91,9 +91,11 @@ public class InitVal {
                 }
                 j++;
             }
-            if (initVals.size() < array.getDim().get(array.getDims() - i)) {
-                for(int k = 0; k < array.getDim().get(array.getDims() - i)-initVals.size(); k ++) {
+            if (initVals.size() < array.getDim().get(i-2)) {
+                for(int k = 0; k < array.getDim().get(i-2)-initVals.size(); k ++) {
                     Bios.fileWriter.write(array.arrayType(array.getDims()-(i-1))+" zeroinitializer");
+                    if(k < array.getDim().get(i-2)-initVals.size() - 1)
+                        Bios.fileWriter.write(", ");
                 }
                 Bios.fileWriter.write("]");
                 return;

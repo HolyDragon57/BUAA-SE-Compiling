@@ -194,9 +194,13 @@ public class Stmt {
             Bios.fileWriter.write("\tbr label "+register+"\n");
         }
         else if(this.isReturn){
-            Token token = this.exp.scan();
-            token.setType(token.getType() == null ? token.getValue(): token.getType());
-            Bios.fileWriter.write("\tret i32 "+token.getType()+"\n");
+            if(this.exp != null) {
+                Token token = this.exp.scan();
+                token.setType(token.getType() == null ? token.getValue() : token.getType());
+                Bios.fileWriter.write("\tret i32 " + token.getType() + "\n");
+            }
+            else
+                Bios.fileWriter.write("\tret void\n");
         }
         else if(this.block != null){
             this.block.scan();

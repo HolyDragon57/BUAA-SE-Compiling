@@ -72,6 +72,8 @@ public class Funcdef {
         this.block.scan();
         if(this.funcType.equals("void"))
             Bios.fileWriter.write("\tret void\n");
+        else
+            Bios.fileWriter.write("\tret i32 1\n");
         Bios.fileWriter.write("}\n");
 
         BlockMarkList.changeBlockMarkList();
